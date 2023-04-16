@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Medicine\IdMedicineRequest;
+use App\Http\Requests\Medicine\StoreMedicineRequest;
+use App\Http\Requests\Medicine\UpdateMedicineRequest;
 use App\Models\Medicine;
-use Illuminate\Http\Request;
 
 class MedicineController extends Controller
 {
@@ -21,46 +23,60 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.medicines.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMedicineRequest $request)
     {
-        //
+        $medicine = new Medicine();
+        $medicine->name = $request->name;
+        $medicine->price = $request->price;
+        $medicine->cost = $request->cost;
+        $medicine->save();
+        return redirect()->route('medicines.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Medicine $medicine)
+    public function show(IdMedicineRequest $request)
     {
-        //
+        $medicine = Medicine::find($request->id);
+        return view('admin.medicines.show', ['medicine' => $medicine], compact('medicine'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Medicine $medicine)
+    public function edit(IdMedicineRequest $request)
     {
-        //
+        $medicine = Medicine::find($request->id);
+        return view('admin.medicines.edit', ['medicine' => $medicine], compact('medicine'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Medicine $medicine)
+    public function update(UpdateMedicineRequest $request)
     {
-        //
+        $medicine = Medicine::find($request->id);
+        $medicine->name = $request->name;
+        $medicine->price = $request->price;
+        $medicine->cost = $request->cost;
+        $medicine->save();
+        return redirect()->route('medicines.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Medicine $medicine)
+    public function destroy(IdMedicineRequest $request)
     {
-        //
+        $medicine = Medicine::find($request->id);
+        $medicine->delete();
+        return redirect()->route('medicines.index');
     }
 }
