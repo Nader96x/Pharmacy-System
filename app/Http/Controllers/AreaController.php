@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Area\AddAreaRequest;
+use App\Http\Requests\Area\EditAreaRequest;
 use App\Models\Area;
 use App\Models\Country;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $areas = Area::all();
+        $areas = Area::first()->paginate(10);
         return view('admin.areas.index', compact('areas'));
     }
 
@@ -53,15 +54,20 @@ class AreaController extends Controller
      */
     public function edit(Area $area)
     {
-        //
+        $countries = Country::all();
+
+        return view('admin.areas.edit', compact('area', 'countries'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Area $area)
+    public function update(EditAreaRequest $request, Area $area)
     {
-        //
+        if($area->update($request->all()))
+            return redirect()->route('areas.index')->with('success', 'Area Updated Successfully');
+        else
+            return redirect()->route('areas.index')->with('error', 'Something Went Wrong!');
     }
 
     /**

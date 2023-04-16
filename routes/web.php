@@ -22,6 +22,8 @@ Route::prefix('/areas')->group(function () {
     Route::get('/', [AreaController::class, 'index'])->name('areas.index');
     Route::get('/create', [AreaController::class ,'create'])->name('areas.create');
     Route::post('/', [AreaController::class, 'store'])->name('areas.store');
-    Route::get('/{area}', [AreaController::class, 'destroy'])->name('areas.destroy');
+    Route::get('{area}/edit', [AreaController::class,'edit'])->name('areas.edit');
+    Route::put('/{area}', [AreaController::class, 'update'])->name('areas.update');
+    Route::delete('/{area}', [AreaController::class, 'destroy'])->name('areas.destroy');
 
 });

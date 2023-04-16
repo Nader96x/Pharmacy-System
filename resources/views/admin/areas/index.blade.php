@@ -65,40 +65,60 @@
                                         {{ $area->country->name }}
                                     </td>
                                     <td class="project-actions text-right">
-                                        <a class="btn btn-info btn-sm" href="#">
+                                        <a class="btn btn-info btn-sm" href="{{ route('areas.edit', $area->id) }}">
                                             <i class="fas fa-pencil-alt">
                                             </i>
                                             Edit
                                         </a>
-                                        <a class="btn btn-danger btn-sm" href="{{ route('areas.destroy', $area->id) }}">
+                                        <form method="POST" action="{{ route('areas.destroy', $area->id) }}" class="d-inline">
                                             @csrf
                                             @method('delete')
-                                            <i class="fas fa-trash">
-                                            </i>
-                                            Delete
-                                        </a>
-{{--=                                        <form action="{{ route('areas.destroy', $area->id) }}" method="post">--}}
-{{--                                            @csrf--}}
-{{--                                            @method('delete')--}}
-{{--                                            <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash">--}}
-{{--                                                </i>--}}
-{{--                                                Delete</button>--}}
-{{--                                        </form>--}}
+                                            <button type="submit" class="btn btn-sm btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
+                                                <i class="fas fa-trash">
+                                                </i>
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="d-flex">
+                        {!! $areas->links() !!}
+                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
         </div>
     </section>
-
 @endsection
 
 
 
 @section('scripts')
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+    <script type="text/javascript">
+
+        $('.show_confirm').click(function(event) {
+            let form =  $(this).closest("form");
+            let name = $(this).data("name");
+            event.preventDefault();
+            swal({
+                title: `Are you sure you want to delete this record?`,
+                text: "If you delete this, it will be gone forever.",
+                icon: "danger",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                    }
+                });
+        });
+    </script>
+
 @endsection
