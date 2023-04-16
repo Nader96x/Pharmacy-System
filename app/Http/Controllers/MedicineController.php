@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Medicine\IdMedicineRequest;
 use App\Http\Requests\Medicine\StoreMedicineRequest;
 use App\Http\Requests\Medicine\UpdateMedicineRequest;
 use App\Models\Medicine;
@@ -42,18 +41,18 @@ class MedicineController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(IdMedicineRequest $request)
+    public function show($id)
     {
-        $medicine = Medicine::find($request->id);
+        $medicine = Medicine::find($id);
         return view('admin.medicines.show', ['medicine' => $medicine], compact('medicine'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(IdMedicineRequest $request)
+    public function edit($id)
     {
-        $medicine = Medicine::find($request->id);
+        $medicine = Medicine::find($id);
         return view('admin.medicines.edit', ['medicine' => $medicine], compact('medicine'));
     }
 
@@ -62,7 +61,7 @@ class MedicineController extends Controller
      */
     public function update(UpdateMedicineRequest $request)
     {
-        $medicine = Medicine::find($request->id);
+        $medicine = Medicine::find($id);
         $medicine->name = $request->name;
         $medicine->price = $request->price;
         $medicine->cost = $request->cost;
@@ -73,9 +72,11 @@ class MedicineController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(IdMedicineRequest $request)
+    public function destroy($id)
     {
-        $medicine = Medicine::find($request->id);
+//        dd($id);
+        $medicine = Medicine::find($id);
+//        dd($medicine);
         $medicine->delete();
         return redirect()->route('medicines.index');
     }

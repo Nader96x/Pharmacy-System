@@ -20,21 +20,19 @@
 
     <!-- Main content -->
     <section class="content">
-
+        @include('partials.flash-message')
         <!-- Default box -->
         <div class="card">
-            {{--<div class="card-header">
-                <h3 class="card-title">Projects</h3>
+            <div class="card-header">
+                <h3 class="card-title">
+                    <a class="btn btn-primary btn-sm" href="{{ route('medicines.create') }}">
+                        <i class="fas fa-plus">
+                        </i>
+                        New Medicine
+                    </a>
+                </h3>
 
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>--}}
+            </div>
             <div class="card-body p-0">
                 <table class="table table-striped projects">
                     <thead>
@@ -63,10 +61,7 @@
                                 {{$medicine['id']}}
                             </td>
                             <td>
-                                <a>
-                                    {{$medicine['name']}}
-                                </a>
-
+                                {{$medicine['name']}}
                             </td>
                             <td>
                                 {{$medicine['price']}}
@@ -75,21 +70,26 @@
                                 {{$medicine['cost']}}
                             </td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" href="#">
-                                    <i class="fas fa-folder">
+                                <a class="btn btn-primary btn-sm" href="{{route('medicines.show',$medicine['id'])}}">
+                                    <i class="fas fa-eye">
                                     </i>
                                     View
                                 </a>
-                                <a class="btn btn-info btn-sm" href="#">
+                                <a class="btn btn-info btn-sm" href="{{route('medicines.edit',$medicine['id'])}}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                     Edit
                                 </a>
-                                <a class="btn btn-danger btn-sm" href="#">
-                                    <i class="fas fa-trash">
-                                    </i>
-                                    Delete
-                                </a>
+
+                                <form action="{{ route('medicines.destroy', $medicine->id) }}" method="POST"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm swal-delete"
+                                            data-id="{{ $medicine->id }}">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -109,4 +109,54 @@
 
 @section('scripts')
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+    <script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
+    <script>
+        // Handle the SweetAlert confirmation dialog for delete actions
+        $('.swal-delete').click(function (e) {
+            e.preventDefault();
+
+            const id = $(this).data('id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    // Send the delete request
+                    $.ajax({
+                        type: 'POST',
+                        url: '/medicines/' + id,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "_method": 'DELETE'
+                        },
+                        success: function (data) {
+                            Swal.fire(
+                                'Deleted!',
+                                'The record has been deleted.',
+                                'success'
+                            );
+                            // Reload the page or redirect to the index page
+                            location.reload();
+                        },
+                        error: function (data) {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting the record.',
+                                'error'
+                            );
+                        }
+                    });
+
+                }
+            });
+        });
+    </script>
 @endsection
