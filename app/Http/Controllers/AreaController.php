@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Area\AddAreaRequest;
 use App\Models\Area;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
@@ -12,7 +14,8 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $areas = Area::all();
+        return view('admin.areas.index', compact('areas'));
     }
 
     /**
@@ -20,15 +23,21 @@ class AreaController extends Controller
      */
     public function create()
     {
-        //
+        $countries = Country::all();
+        return view('admin.areas.create', compact('countries'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AddAreaRequest $request)
     {
-        //
+        $area = Area::create($request->all());
+        if($area){
+            return redirect()->route('areas.index')->with('success','Area created successfully!');
+        }else{
+            return back()->with('error', 'Something Went Wrong');
+        }
     }
 
     /**
@@ -36,7 +45,7 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        //
+
     }
 
     /**
@@ -58,8 +67,14 @@ class AreaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Area $area)
+    public function destroy($id)
     {
-        //
+        $area = Area::find($id);
+        if($area){
+            $area->delete();
+            return redirect()->route('areas.index')->with('success', 'Area Deleted Successfully');
+        }else{
+            return back()->with('error', 'Area Not Found');
+        }
     }
 }
