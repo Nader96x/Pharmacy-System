@@ -30,12 +30,13 @@ class MedicineController extends Controller
      */
     public function store(StoreMedicineRequest $request)
     {
+//        dd($request->all());
         $medicine = new Medicine();
         $medicine->name = $request->name;
         $medicine->price = $request->price;
         $medicine->cost = $request->cost;
         $medicine->save();
-        return redirect()->route('medicines.index');
+        return redirect()->route('medicines.index')->with('success', 'Item stored successfully!');
     }
 
     /**
@@ -52,6 +53,7 @@ class MedicineController extends Controller
      */
     public function edit($id)
     {
+//        dd($id);
         $medicine = Medicine::find($id);
         return view('admin.medicines.edit', ['medicine' => $medicine], compact('medicine'));
     }
@@ -59,14 +61,14 @@ class MedicineController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMedicineRequest $request)
+    public function update($id, UpdateMedicineRequest $request)
     {
         $medicine = Medicine::find($id);
         $medicine->name = $request->name;
         $medicine->price = $request->price;
         $medicine->cost = $request->cost;
         $medicine->save();
-        return redirect()->route('medicines.index');
+        return redirect()->route('medicines.index')->with('success', 'Item updated successfully!');
     }
 
     /**
@@ -78,6 +80,6 @@ class MedicineController extends Controller
         $medicine = Medicine::find($id);
 //        dd($medicine);
         $medicine->delete();
-        return redirect()->route('medicines.index');
+        return redirect()->route('medicines.index')->with('success', 'Item Deleted successfully!');
     }
 }
