@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Database\Factories\MedicineFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        MedicineFactory::new()->count(100)->create();
+//        MedicineFactory::new()->count(100)->create();
 //        Country Seeder
 //        $this->call(CountriesSeeder::class);
 //        $this->command->info('Seeded the countries!');
