@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
-class AreaController extends Controller
+class CountryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $areas = Area::all();
-
-        return view('areas.index', compact('areas'));
+        //
     }
 
     /**
@@ -36,7 +34,7 @@ class AreaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Area $area)
+    public function show(Country $country)
     {
         //
     }
@@ -44,7 +42,7 @@ class AreaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Area $area)
+    public function edit(Country $country)
     {
         //
     }
@@ -52,7 +50,7 @@ class AreaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Area $area)
+    public function update(Request $request, Country $country)
     {
         //
     }
@@ -60,7 +58,7 @@ class AreaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Area $area)
+    public function destroy(Country $country)
     {
         //
     }
