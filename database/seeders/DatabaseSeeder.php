@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\MedicineFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,15 +14,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//        MedicineFactory::new()->count(100)->create();
-//        Country Seeder
-//        $this->call(CountriesSeeder::class);
-//        $this->command->info('Seeded the countries!');
-        // \App\Models\User::factory(10)->create();
+        DB::table("medicines")->count() > 0
+            ?
+            $this->command->warn('Medicines table is not empty, therefore NOT seeding!')
+            :
+            MedicineFactory::new()->count(100)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        DB::table("admins")->count() > 0
+            ?
+            $this->command->warn('Admins table is not empty, therefore NOT seeding!')
+            :
+            $this->call(AdminSeeder::class);
+
+        DB::table(\Config::get('countries.table_name'))->count() > 0
+            ?
+            $this->command->warn('Countries table is not empty, therefore NOT seeding!')
+            :
+            $this->call(CountriesSeeder::class);
+
+        DB::table("areas")->count() > 10
+            ?
+            $this->command->warn('Areas table is not empty, therefore NOT seeding!')
+            :
+//            AreaFactory::new()->count(50)->create();
+            $this->call(AreaSeeder::class);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Webpatser\Countries\Countries;
@@ -17,9 +16,8 @@ class CountriesSeeder extends Seeder
      */
     public function run()
     {
-        return;
         //Empty the countries table
-        DB::table(\Config::get('countries.table_name'))->delete();
+//        DB::table(\Config::get('countries.table_name'))->delete();
 
         //Get all of the countries
         $countries = (new Countries())->getList();
@@ -45,5 +43,6 @@ class CountriesSeeder extends Seeder
                 'flag' => ((isset($country['flag'])) ? $country['flag'] : null),
             ));
         }
+        $this->command->info('Countries created successfully.');
     }
 }
