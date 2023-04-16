@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('pharmacies', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('avatar');
+            $table->integer('priority');
+            $table->foreignId('area_id')->constrained('areas');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
