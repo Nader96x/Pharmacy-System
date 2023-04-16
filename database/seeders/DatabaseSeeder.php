@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 //        Country Seeder
-        $this->call(CountriesSeeder::class);
-        $this->command->info('Seeded the countries!');
+//        $this->call(CountriesSeeder::class);
+//        $this->command->info('Seeded the countries!');
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([
