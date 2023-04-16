@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('image');
             $table->bigInteger('national_id')->unique();
             $table->foreignId('pharmacy_id')->constrained('pharmacies');
-            $table->boolean('is_banned')->default(false);
             $table->timestamp('banned_at')->nullable();
             $table->timestamps();
         });
