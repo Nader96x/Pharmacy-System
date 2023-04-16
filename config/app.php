@@ -185,6 +185,8 @@ return [
         Cog\Laravel\Ban\Providers\BanServiceProvider::class,
         Webpatser\Countries\CountriesServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -215,6 +217,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Countries' => Webpatser\Countries\CountriesFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+
     ])->toArray(),
 
 ];
