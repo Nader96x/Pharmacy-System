@@ -20,7 +20,7 @@ class MedicineFactory extends Factory
         return [
             'name' => $this->faker->name,
             'price' => $price,
-            'cost' => number_format($price * 0.8, 2),
+            'cost' => number_format($price * 0.8),
 
         ];
     }

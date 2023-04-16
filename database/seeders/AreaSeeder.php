@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Area;
 use App\Models\Country;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class AreaSeeder extends Seeder
@@ -14,6 +13,7 @@ class AreaSeeder extends Seeder
      */
     public function run(): void
     {
+        return;
         $countries = Country::all();
 
         $areas = [

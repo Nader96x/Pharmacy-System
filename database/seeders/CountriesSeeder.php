@@ -7,7 +7,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Webpatser\Countries\Countries;
 
-class CountriesSeeder extends Seeder {
+class CountriesSeeder extends Seeder
+{
 
     /**
      * Run the database seeds.
@@ -16,12 +17,13 @@ class CountriesSeeder extends Seeder {
      */
     public function run()
     {
+        return;
         //Empty the countries table
         DB::table(\Config::get('countries.table_name'))->delete();
 
         //Get all of the countries
         $countries = (new Countries())->getList();
-        foreach ($countries as $countryId => $country){
+        foreach ($countries as $countryId => $country) {
             DB::table(\Config::get('countries.table_name'))->insert(array(
                 'id' => $countryId,
                 'capital' => ((isset($country['capital'])) ? $country['capital'] : null),
@@ -40,7 +42,7 @@ class CountriesSeeder extends Seeder {
                 'eea' => (bool)$country['eea'],
                 'calling_code' => $country['calling_code'],
                 'currency_symbol' => ((isset($country['currency_symbol'])) ? $country['currency_symbol'] : null),
-                'flag' =>((isset($country['flag'])) ? $country['flag'] : null),
+                'flag' => ((isset($country['flag'])) ? $country['flag'] : null),
             ));
         }
     }
