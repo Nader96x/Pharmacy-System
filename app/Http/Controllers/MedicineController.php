@@ -13,6 +13,10 @@ class MedicineController extends Controller
      */
     public function index()
     {
+        // permissions count for user authed
+//        $permissions = auth()->user()->getAllPermissions()->count();
+        // get role name of authed user
+//        $role = auth()->user()->getRoleNames();
 //        auth()->user()->assignRole('doctor');
 //        // print user authed role and premissions
 //        dd(auth()->user(),

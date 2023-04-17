@@ -22,7 +22,7 @@ Route::get('/', function () {
 //})->middleware(['auth', 'verified']);
 })->middleware(['auth', 'verified', 'role:admin|owner|doctor']);
 
-Route::group(['middleware' => ['role:admin|owner']], function () {
+Route::group(['middleware' => ['role:admin']], function () {
     Route::prefix('/areas')->group(function () {
         Route::get('/', [AreaController::class, 'index'])->name('areas.index');
         Route::get('/create', [AreaController::class, 'create'])->name('areas.create');
@@ -33,20 +33,27 @@ Route::group(['middleware' => ['role:admin|owner']], function () {
     });
 });
 
+Route::group(['middleware' => ['role:admin']], function () {
+    Route::prefix('/users')->group(function () {
 
-Route::prefix('/medicines')->group(function () {
-    Route::get('/', [MedicineController::class, 'index'])->name('medicines.index');
-    Route::get('/create', [MedicineController::class, 'create'])->name('medicines.create');
-    Route::post('/', [MedicineController::class, 'store'])->name('medicines.store');
-    Route::delete('/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
-    Route::get('/{id}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
-    Route::put('/{id}', [MedicineController::class, 'update'])->name('medicines.update');
-    Route::get('/{id}', [MedicineController::class, 'show'])->name('medicines.show');
+    });
 });
-Route::prefix('/addresses')->group(function () {
-    Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
-    Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
+Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
+    Route::prefix('/medicines')->group(function () {
+        Route::get('/', [MedicineController::class, 'index'])->name('medicines.index');
+        Route::get('/create', [MedicineController::class, 'create'])->name('medicines.create');
+        Route::post('/', [MedicineController::class, 'store'])->name('medicines.store');
+        Route::delete('/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
+        Route::get('/{id}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
+        Route::put('/{id}', [MedicineController::class, 'update'])->name('medicines.update');
+        Route::get('/{id}', [MedicineController::class, 'show'])->name('medicines.show');
+    });
 });
-
+Route::group(['middleware' => ['role:admin']], function () {
+    Route::prefix('/addresses')->group(function () {
+        Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
+        Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
+    });
+});
 
 Auth::routes(['register' => false]);

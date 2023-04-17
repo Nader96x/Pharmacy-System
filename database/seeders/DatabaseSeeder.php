@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'pharmacies']);
         Permission::create(['name' => 'owners']);
         Permission::create(['name' => 'users']);
+        Permission::create(['name' => 'addresses']);
+
 
         $this->command->info('Creating roles.');
         Role::all()->each->delete();

@@ -6,7 +6,8 @@
             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">{{Auth::user()->name}}</a>
+
+            <a href="#" class="d-block">{{Auth::user()->name}} - {{Auth::user()->getRoleNames()}}</a>
         </div>
     </div>
 
@@ -50,20 +51,15 @@
                     <p>
                         Options
                         <i class="fas fa-angle-left right"></i>
-                        <span class="badge badge-info right">8</span>
+                        <span class="badge badge-info right">{{Auth::user()->getAllPermissions()->count()}}</span>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    @role('admin')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Pharmacies</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Doctors</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -78,6 +74,23 @@
                             <p>User Addresses</p>
                         </a>
                     </li>
+                    @endrole
+                    @role('admin|owner')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Doctors</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @role('admin|owner|doctor')
+
                     <li class="nav-item">
                         <a href="{{ route('medicines.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
@@ -90,12 +103,15 @@
                             <p>Orders</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Revenue</p>
-                        </a>
-                    </li>
+                    @endrole
+                    @if(Auth::user()->hasRole('admin|owner'))
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Revenue</p>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
             <li class="nav-item">
