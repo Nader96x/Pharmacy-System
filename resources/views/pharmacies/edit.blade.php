@@ -22,6 +22,10 @@
                                 <input type="text" class="form-control" name="avatar" value="{{ $pharmacy['avatar'] }}">
                             </div>
                             <div class="mb-3">
+                                <label class="form-label">Priority</label>
+                                <input type="number" class="form-control" name="priority" value="{{ $pharmacy['priority'] }}">
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label">Area_id</label>
                                 <select id="area_id" name="area_id" class="form-control">
                                     @foreach($areas as $area)
@@ -35,8 +39,4 @@
             </div>
         </div>
     </section>
-@endsection
-
-@section('scripts')
-    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
 @endsection

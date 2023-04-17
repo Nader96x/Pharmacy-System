@@ -14,16 +14,17 @@
                             @csrf
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="text" id="name" name="name" value="{{ old('name') }}" class="form-control">
+                                <input type="text" id="name" name="name" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="name">Avatar</label>
-                                <input type="text" id="price" name="avatar" min="1" value="{{ old('avatar') }}"
+                                <input type="text" id="avatar" name="avatar" min="1"
                                        class="form-control">
                             </div>
+
                             <div class="form-group">
                                 <label for="name">Priority</label>
-                                <input type="number" id="cost" name="priority" min="1" value="{{ old('priority') }}"
+                                <input type="number" id="priority" name="priority" min="1"
                                        class="form-control">
                             </div>
                             <div class="form-group">
@@ -42,8 +43,4 @@
             </div>
         </div>
     </section>
-@endsection
-
-@section('scripts')
-    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
 @endsection

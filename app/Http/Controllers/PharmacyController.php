@@ -37,11 +37,7 @@ class PharmacyController extends Controller
     {
         //
         $allPharmacies = Pharmacy::create($request->all());
-        if($allPharmacies){
             return redirect()->route('pharmacies.index')->with('success','Pharmacy created successfully!');
-        }else{
-            return back()->with('error', 'Something Went Wrong');
-        }
     }
 
     /**

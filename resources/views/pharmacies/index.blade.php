@@ -1,61 +1,47 @@
 @extends('layouts.admin')
 
 @section('content')
-
-    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Pharmacies</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item active">Pharmacies</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
 {{--            @include('partials.flash-message')--}}
             <div class="card">
                 <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">
-                        <a class="btn btn-primary btn-sm" href="{{ route('pharmacies.create') }}">
-                            <i class="fas fa-plus">
-                            </i>
-                            New pharmacy
+                        <a class="btn btn-primary btn-sm ml-auto" href="{{ route('pharmacies.create') }}">
+                            <i class="fas fa-plus"></i>
+                             New Pharmacy
                         </a>
                     </h3>
-
+                    </div>
                 </div>
+
                 <div class="card-body p-0">
-                    <table class="table table-striped projects">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width: 1%">
-                                ID
-                            </th>
-                            <th style="width: 20%">
-                                Name
-                            </th>
-                            <th style="width: 30%">
-                                Avatar
-                            </th>
-                            <th style="width: 30%">
-                                Priority
-                            </th>
-                            <th style="width: 30%">
-                                Area
-                            </th>
-                            <th style="width: 30%">
-                            </th>
+                            <th style="width: 1%">ID</th>
+                            <th style="width: 30%">Name</th>
+                            <th style="width: 20%">Avatar</th>
+                            <th style="width: 20%">Priority</th>
+                            <th style="width: 20%">Area</th>
+                            <th style="width: 30%"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -86,7 +72,7 @@
                                     <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline" onclick="return confirm('Are you sure you want to delete this pharmacy?')">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="btn btn-danger rounded"  onclick="return confirmDelete({{ $pharmacy->id }})">
+                                        <button type="submit" class="btn btn-danger rounded">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
