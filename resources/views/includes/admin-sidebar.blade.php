@@ -48,58 +48,52 @@
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-copy"></i>
                     <p>
-                        Layout Options
+                        Options
                         <i class="fas fa-angle-left right"></i>
-                        <span class="badge badge-info right">6</span>
+                        <span class="badge badge-info right">8</span>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="pages/layout/top-nav.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Top Navigation</p>
+                            <p>Pharmacies</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Top Navigation + Sidebar</p>
+                            <p>Doctors</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/boxed.html" class="nav-link">
+                        <a href="{{ route('areas.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Boxed</p>
+                            <p>Areas</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-sidebar.html" class="nav-link">
+                        <a href="{{ route('addresses.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Sidebar</p>
+                            <p>User Addresses</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
+                        <a href="{{ route('medicines.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Sidebar <small>+ Custom Area</small></p>
+                            <p>Medicines</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-topnav.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Navbar</p>
+                            <p>Orders</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-footer.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Footer</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Collapsed Sidebar</p>
+                            <p>Revenue</p>
                         </a>
                     </li>
                 </ul>

@@ -50,7 +50,7 @@
                             Cost ($)
                         </th>
 
-                        <th style="width: 20%">
+                        <th style="width: 30%">
                         </th>
                     </tr>
                     </thead>
