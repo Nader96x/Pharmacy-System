@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\UserAddressController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -56,14 +57,17 @@ Route::group(['middleware' => ['role:admin']], function () {
     });
 });
 
-Auth::routes(['register' => false]);
-
-Route::prefix('/pharmacy')->group(function () {
-    Route::get('/', [\App\Http\Controllers\PharmacyController::class, 'index'])->name('pharmacies.index');
-    Route::get('/create', [\App\Http\Controllers\PharmacyController::class, 'create'])->name('pharmacies.create');
-    Route::post('/', [\App\Http\Controllers\PharmacyController::class, 'store'])->name('pharmacies.store');
-    Route::get('{pharmacy}/edit', [\App\Http\Controllers\PharmacyController::class,'edit'])->name('pharmacies.edit');
-    Route::put('/{pharmacy}', [\App\Http\Controllers\PharmacyController::class, 'update'])->name('pharmacies.update');
-    Route::delete('/{pharmacy}', [\App\Http\Controllers\PharmacyController::class, 'destroy'])->name('pharmacies.destroy');
-    Route::post('/pharmacies/{pharmacy}/restore', [\App\Http\Controllers\PharmacyController::class, 'restore'])->name('pharmacies.restore');
+Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
+    Route::prefix('/pharmacy')->group(function () {
+        Route::get('/', [PharmacyController::class, 'index'])->name('pharmacies.index');
+        Route::get('/create', [PharmacyController::class, 'create'])->name('pharmacies.create');
+        Route::post('/', [PharmacyController::class, 'store'])->name('pharmacies.store');
+        Route::get('{pharmacy}/edit', [PharmacyController::class, 'edit'])->name('pharmacies.edit');
+        Route::put('/{pharmacy}', [PharmacyController::class, 'update'])->name('pharmacies.update');
+        Route::delete('/{pharmacy}', [PharmacyController::class, 'destroy'])->name('pharmacies.destroy');
+        Route::post('/pharmacies/{pharmacy}/restore', [PharmacyController::class, 'restore'])->name('pharmacies.restore');
+    });
 });
+
+
+Auth::routes(['register' => false]);
