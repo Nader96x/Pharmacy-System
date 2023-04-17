@@ -19,16 +19,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('admin.dashboard');
-})->middleware(['auth', 'verified']);
+//})->middleware(['auth', 'verified']);
+})->middleware(['auth', 'verified', 'role:admin|owner|doctor']);
 
-Route::prefix('/areas')->group(function () {
-    Route::get('/', [AreaController::class, 'index'])->name('areas.index');
-    Route::get('/create', [AreaController::class, 'create'])->name('areas.create');
-    Route::post('/', [AreaController::class, 'store'])->name('areas.store');
-    Route::get('{area}/edit', [AreaController::class,'edit'])->name('areas.edit');
-    Route::put('/{area}', [AreaController::class, 'update'])->name('areas.update');
-    Route::delete('/{area}', [AreaController::class, 'destroy'])->name('areas.destroy');
+Route::group(['middleware' => ['role:admin|owner']], function () {
+    Route::prefix('/areas')->group(function () {
+        Route::get('/', [AreaController::class, 'index'])->name('areas.index');
+        Route::get('/create', [AreaController::class, 'create'])->name('areas.create');
+        Route::post('/', [AreaController::class, 'store'])->name('areas.store');
+        Route::get('{area}/edit', [AreaController::class, 'edit'])->name('areas.edit');
+        Route::put('/{area}', [AreaController::class, 'update'])->name('areas.update');
+        Route::delete('/{area}', [AreaController::class, 'destroy'])->name('areas.destroy');
+    });
 });
+
+
 Route::prefix('/medicines')->group(function () {
     Route::get('/', [MedicineController::class, 'index'])->name('medicines.index');
     Route::get('/create', [MedicineController::class, 'create'])->name('medicines.create');
@@ -42,8 +47,6 @@ Route::prefix('/addresses')->group(function () {
     Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
     Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
-
-
 
 
 Auth::routes(['register' => false]);

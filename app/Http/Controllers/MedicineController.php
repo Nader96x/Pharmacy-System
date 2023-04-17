@@ -13,6 +13,15 @@ class MedicineController extends Controller
      */
     public function index()
     {
+//        auth()->user()->assignRole('doctor');
+//        // print user authed role and premissions
+//        dd(auth()->user(),
+//            auth()->user()->getAllPermissions(),
+//            auth()->user()->getRoleNames(),
+//            auth()->user()->hasRole('admin'),
+//            auth()->user()->Permissions(),
+//        );
+
         $medicines = Medicine::paginate(10);
         return view('admin.medicines.index', ['medicines' => $medicines], compact('medicines'));
     }

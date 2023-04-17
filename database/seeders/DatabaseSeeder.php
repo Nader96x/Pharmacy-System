@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
         Permission::all()->each->delete();
         Role::all()->each->delete();
 
+        $this->command->info('Creating permissions.');
+
         // Doctor Permissions
         Permission::create(['name' => 'medicines']);
         Permission::create(['name' => 'orders']);
@@ -35,16 +37,19 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'owners']);
         Permission::create(['name' => 'users']);
 
+        $this->command->info('Creating roles.');
         Role::all()->each->delete();
         $admin = Role::create(['name' => 'admin']);
         $owner = Role::create(['name' => 'owner']);
         $doctor = Role::create(['name' => 'doctor']);
 
+        $this->command->info('Assigning permissions to roles.');
+        // permissions for admin
         $admin->givePermissionTo(Permission::all());
+        // permissions for doctor
         $doctor->givePermissionTo('medicines');
         $doctor->givePermissionTo('orders');
-
-        // all doctor permissions + owner permissions
+        // perrimissions for owner
         $owner->givePermissionTo(Permission::all()->except(['areas', 'pharmacies', 'owners', 'users']));
 
 

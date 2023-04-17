@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,8 +20,6 @@ class AdminSeeder extends Seeder
             'updated_at' => now(),
         ]);
         // for each admin assign role admin
-        $admin = Admin::all();
-        $admin[0]->assignRole('admin');
         $this->command->info('Admin created successfully.');
     }
 }
