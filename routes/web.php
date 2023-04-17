@@ -3,6 +3,7 @@
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\UserAddressController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('admin.dashboard');
-});
+})->middleware(['auth', 'verified']);
 
 Route::prefix('/areas')->group(function () {
     Route::get('/', [AreaController::class, 'index'])->name('areas.index');
@@ -44,3 +45,5 @@ Route::prefix('/addresses')->group(function () {
 
 
 
+
+Auth::routes(['register' => false]);
