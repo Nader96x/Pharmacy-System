@@ -32,11 +32,17 @@ class DatabaseSeeder extends Seeder
             :
             $this->call(CountriesSeeder::class);
 
-        DB::table("areas")->count() > 10
+        DB::table("areas")->count() > 0
             ?
             $this->command->warn('Areas table is not empty, therefore NOT seeding!')
             :
 //            AreaFactory::new()->count(50)->create();
             $this->call(AreaSeeder::class);
+        DB::table("user_addresses")->count() > 0
+            ?
+            $this->command->warn('Addresses table is not empty, therefore NOT seeding!')
+            :
+//            AreaFactory::new()->count(50)->create();
+            $this->call(UserAddressesSeeder::class);
     }
 }
