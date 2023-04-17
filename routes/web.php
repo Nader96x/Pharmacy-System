@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\UserAddressController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,6 @@ Route::prefix('/areas')->group(function () {
     Route::get('{area}/edit', [AreaController::class,'edit'])->name('areas.edit');
     Route::put('/{area}', [AreaController::class, 'update'])->name('areas.update');
     Route::delete('/{area}', [AreaController::class, 'destroy'])->name('areas.destroy');
-
 });
 Route::prefix('/medicines')->group(function () {
     Route::get('/', [MedicineController::class, 'index'])->name('medicines.index');
@@ -36,6 +36,10 @@ Route::prefix('/medicines')->group(function () {
     Route::get('/{id}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
     Route::put('/{id}', [MedicineController::class, 'update'])->name('medicines.update');
     Route::get('/{id}', [MedicineController::class, 'show'])->name('medicines.show');
+});
+Route::prefix('/addresses')->group(function () {
+    Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
+    Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
 
 

@@ -7,12 +7,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Areas</h1>
+                    <h1 class="m-0">Users Addresses</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active">Areas</li>
+                        <li class="breadcrumb-item active">addresses</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -25,16 +25,6 @@
         <div class="container-fluid">
             @include('partials.flash-message')
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <a class="btn btn-primary btn-sm" href="{{ route('areas.create') }}">
-                            <i class="fas fa-plus">
-                            </i>
-                            New Area
-                        </a>
-                    </h3>
-
-                </div>
                 <div class="card-body p-0">
                     <table class="table table-striped projects">
                         <thead>
@@ -45,32 +35,41 @@
                             <th style="width: 20%">
                                 Area Name
                             </th>
-                            <th style="width: 30%">
-                                Country
+                            <th style="width: 20%">
+                                Street Name
+                            </th>
+                            <th style="width: 5%">
+                                Building No.
+                            </th>
+                            <th style="width: 5%">
+                                Floor No.
+                            </th>
+                            <th style="width: 5%">
+                                Flat No.
+                            </th>
+                            <th style="width: 5%">
+                                Main Address
+                            </th>
+                            <th style="width: 15%">
+                                User Name
                             </th>
                             <th style="width: 30%">
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach($areas as $area)
+                            @foreach($addresses as $address)
                                 <tr>
+                                    <td>{{ $address->id }}</td>
+                                    <td>{{ $address->area->name }}</td>
+                                    <td>{{ $address->street_name }}</td>
+                                    <td>{{ $address->building_number }}</td>
+                                    <td>{{ $address->floor_number }}</td>
+                                    <td>{{ $address->flat_number }}</td>
+                                    <td>{{ $address->is_main ? 'Yes' : 'No' }}</td>
+                                    <td>{{ $address->user->name }}</td>
                                     <td>
-                                        {{ $area->id }}
-                                    </td>
-                                    <td>
-                                        {{ $area->name }}
-                                    </td>
-                                    <td>
-                                        {{ $area->country->name }}
-                                    </td>
-                                    <td class="project-actions text-right">
-                                        <a class="btn btn-info btn-sm" href="{{ route('areas.edit', $area->id) }}">
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            Edit
-                                        </a>
-                                        <form method="POST" action="{{ route('areas.destroy', $area->id) }}" class="d-inline">
+                                        <form method="POST" action="{{ route('addresses.destroy', $address->id) }}" class="d-inline">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="btn btn-sm btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
@@ -86,7 +85,7 @@
                     </table>
 
                     <div class="d-flex">
-                        {!! $areas->links() !!}
+                        {!! $addresses->links() !!}
                     </div>
                 </div>
                 <!-- /.card-body -->
