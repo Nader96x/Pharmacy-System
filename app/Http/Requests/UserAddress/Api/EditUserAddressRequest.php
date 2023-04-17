@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\UserAddress;
+namespace App\Http\Requests\UserAddress\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,29 +22,23 @@ class EditUserAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'street_name' => 'required|string|max:255',
-            'building_number' => 'required|numeric|min:1',
-            'floor_number' => 'required|numeric|min:0',
-            'flat_number' => 'required|numeric|min:1',
+            'street_name' => 'string|max:255',
+            'building_number' => 'numeric|min:1',
+            'floor_number' => 'numeric|min:0',
+            'flat_number' => 'numeric|min:1',
             'is_main' => 'nullable|boolean',
-            'user_id' => 'required|exists:users,id',
-            'area_id' => 'required|exists:areas,id',
+            'user_id' => 'exists:users,id',
+            'area_id' => 'exists:areas,id',
         ];
     }
 
     public function messages()
     {
         return [
-            'street_name.required' => 'street name field is required.',
-            'building_number.required' => 'building number field is required.',
             'building_number.min' => 'building number must be at least 1.',
-            'floor_number.required' => 'Floor number field is required.',
             'floor_number.min' => 'Floor number must be at least 0.',
-            'flat_number.required' => 'Flat number field is required.',
             'flat_number.min' => 'Falt number must be at least 1.',
-            'user_id.required' => 'user ID field is required.',
             'user_id.exists' => 'user ID is invalid.',
-            'area_id.required' => 'area ID field is required.',
             'area_id.exists' => 'area ID is invalid.',
         ];
     }

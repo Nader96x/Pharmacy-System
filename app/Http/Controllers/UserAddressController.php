@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserAddress\AddUserAddressRequest;
-use App\Http\Requests\UserAddress\EditUserAddressRequest;
-use App\Models\Area;
-use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 
@@ -29,9 +26,6 @@ class UserAddressController extends Controller
      */
     public function create()
     {
-        $areas = Area::all();
-        $users = User::all();
-        return view('admin.addresses.create', compact('areas', 'users'));
     }
 
     /**
@@ -39,13 +33,7 @@ class UserAddressController extends Controller
      */
     public function store(AddUserAddressRequest $request)
     {
-        if(UserAddress::create($request->all())){
-            return redirect()->route('addresses.index')->with('success', 'Address added Successfully');
-        }else{
-            return redirect()->route('addresses.index')->with('error', 'Something Went Wrong');
-        }
-
-
+        //
     }
 
     /**
@@ -61,22 +49,15 @@ class UserAddressController extends Controller
      */
     public function edit(UserAddress $address)
     {
-        $areas = Area::all();
-        $users = User::all();
-        return view('admin.addresses.edit', compact('address', 'areas','users'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditUserAddressRequest $request, UserAddress $address)
+    public function update(Request $request, UserAddress $address)
     {
-        if($address->update($request->all())){
-            return redirect()->route('addresses.index')->with('success', 'Address Updated Successfully');
-        }else{
-            return redirect()->route('addresses.index')->with('error', 'Something Went wrong');
-        }
-
+        //
     }
 
     /**

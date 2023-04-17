@@ -39,10 +39,6 @@ Route::prefix('/medicines')->group(function () {
 });
 Route::prefix('/addresses')->group(function () {
     Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
-    Route::get('/create', [UserAddressController::class, 'create'])->name('addresses.create');
-    Route::post('/', [UserAddressController::class, 'store'])->name('addresses.store');
-    Route::get('{address}/edit', [UserAddressController::class,'edit'])->name('addresses.edit');
-    Route::put('/{address}', [UserAddressController::class, 'update'])->name('addresses.update');
     Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
 

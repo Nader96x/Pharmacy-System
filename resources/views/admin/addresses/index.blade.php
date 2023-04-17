@@ -25,16 +25,6 @@
         <div class="container-fluid">
             @include('partials.flash-message')
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <a class="btn btn-primary btn-sm" href="{{ route('addresses.create') }}">
-                            <i class="fas fa-plus">
-                            </i>
-                            New Address
-                        </a>
-                    </h3>
-
-                </div>
                 <div class="card-body p-0">
                     <table class="table table-striped projects">
                         <thead>
@@ -78,12 +68,7 @@
                                     <td>{{ $address->flat_number }}</td>
                                     <td>{{ $address->is_main ? 'Yes' : 'No' }}</td>
                                     <td>{{ $address->user->name }}</td>
-                                    <td class="project-actions text-right">
-                                        <a class="btn btn-info btn-sm" href="{{ route('addresses.edit', $address->id) }}">
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            Edit
-                                        </a>
+                                    <td>
                                         <form method="POST" action="{{ route('addresses.destroy', $address->id) }}" class="d-inline">
                                             @csrf
                                             @method('delete')
