@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body">
 {{--                        @include('partials.validation_errors')--}}
-                        <form action="{{ route('pharmacies.update', ['pharmacy' => $pharmacy->id]) }}" method="POST">
+                        <form action="{{ route('pharmacies.update', ['pharmacy' => $pharmacy->id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -19,7 +19,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Avatar</label>
-                                <input type="text" class="form-control" name="avatar" value="{{ $pharmacy['avatar'] }}">
+                                <input type="file" class="form-control" name="avatar" value="{{ $pharmacy['avatar'] }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Priority</label>

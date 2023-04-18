@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body">
 {{--                        @include('partials.validation_errors')--}}
-                        <form action="{{ route('pharmacies.store') }}" method="post">
+                        <form action="{{ route('pharmacies.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="name">Name</label>
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="name">Avatar</label>
-                                <input type="text" id="avatar" name="avatar" min="1"
+                                <input type="file" id="avatar" name="avatar" min="1"
                                        class="form-control">
                             </div>
 
