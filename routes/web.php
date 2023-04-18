@@ -26,3 +26,11 @@ Route::prefix('/pharmacy')->group(function () {
     Route::delete('/{pharmacy}', [\App\Http\Controllers\PharmacyController::class, 'destroy'])->name('pharmacies.destroy');
     Route::post('/pharmacies/{pharmacy}/restore', [\App\Http\Controllers\PharmacyController::class, 'restore'])->name('pharmacies.restore');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
