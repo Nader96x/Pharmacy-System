@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('admin.dashboard');
 //})->middleware(['auth', 'verified']);
 })->middleware(['auth', 'verified', 'role:admin|owner|doctor']);
-
+Route::get('/send-welcome-email', [\App\Http\Controllers\Mail\SendWelcomeController::class,'sendWelcomeEmail']);
 Route::group(['middleware' => ['role:admin']], function () {
     Route::prefix('/areas')->group(function () {
         Route::get('/', [AreaController::class, 'index'])->name('areas.index');
