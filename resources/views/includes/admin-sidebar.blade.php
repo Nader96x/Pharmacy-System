@@ -6,7 +6,8 @@
             <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+
+            <a href="#" class="d-block">{{Auth::user()->name}} - {{Auth::user()->getRoleNames()}}</a>
         </div>
     </div>
 
@@ -48,60 +49,69 @@
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-copy"></i>
                     <p>
-                        Layout Options
+                        Options
                         <i class="fas fa-angle-left right"></i>
-                        <span class="badge badge-info right">6</span>
+                        <span class="badge badge-info right">{{Auth::user()->getAllPermissions()->count()}}</span>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    @role('admin')
                     <li class="nav-item">
-                        <a href="pages/layout/top-nav.html" class="nav-link">
+                        <a href="{{route("pharmacies.index")}}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Top Navigation</p>
+                            <p>Pharmacies</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                        <a href="{{ route('areas.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Top Navigation + Sidebar</p>
+                            <p>Areas</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/boxed.html" class="nav-link">
+                        <a href="{{ route('addresses.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Boxed</p>
+                            <p>User Addresses</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @role('admin|owner')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Doctors</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-sidebar.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Sidebar</p>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @role('admin|owner|doctor')
+
+                    <li class="nav-item">
+                        <a href="{{ route('medicines.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Medicines</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/layout/fixed-sidebar-custom.html" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Sidebar <small>+ Custom Area</small></p>
+                            <p>Orders</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Navbar</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="pages/layout/fixed-footer.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Fixed Footer</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Collapsed Sidebar</p>
-                        </a>
-                    </li>
+                    @endrole
+                    @if(Auth::user()->hasRole('admin|owner'))
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Revenue</p>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
             <li class="nav-item">

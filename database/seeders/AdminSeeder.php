@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        // for each admin assign role admin
         $this->command->info('Admin created successfully.');
     }
 }

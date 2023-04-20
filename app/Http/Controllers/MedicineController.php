@@ -13,6 +13,19 @@ class MedicineController extends Controller
      */
     public function index()
     {
+        // permissions count for user authed
+//        $permissions = auth()->user()->getAllPermissions()->count();
+        // get role name of authed user
+//        $role = auth()->user()->getRoleNames();
+//        auth()->user()->assignRole('doctor');
+//        // print user authed role and premissions
+//        dd(auth()->user(),
+//            auth()->user()->getAllPermissions(),
+//            auth()->user()->getRoleNames(),
+//            auth()->user()->hasRole('admin'),
+//            auth()->user()->Permissions(),
+//        );
+
         $medicines = Medicine::paginate(10);
         return view('admin.medicines.index', ['medicines' => $medicines], compact('medicines'));
     }

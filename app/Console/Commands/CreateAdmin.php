@@ -30,7 +30,7 @@ class CreateAdmin extends Command
     {
         $email = $this->option('email');
         $password = $this->option('password');
-        if($this->validateInput()) {
+        if ($this->validateInput()) {
             $admin = new Admin;
             $admin->email = $email;
             $admin->password = bcrypt($password);
@@ -38,10 +38,11 @@ class CreateAdmin extends Command
 
             $this->info("Admin created successfully.");
             $this->info("Email: $email");
-            $this->info("Password: $password");
+//            $this->info("Password: $password");
         }
 
     }
+
     // add some validation
     protected function validateInput()
     {
@@ -52,7 +53,7 @@ class CreateAdmin extends Command
             $this->error('Email is required.');
             $errors++;
         }
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->error('Email is invalid.');
             $errors++;
         }

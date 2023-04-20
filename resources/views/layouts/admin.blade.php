@@ -45,7 +45,15 @@
                 <a href="/" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="/areas" class="nav-link">Areas</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
             </li>
         </ul>
 
@@ -223,6 +231,7 @@
 <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
 <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 @yield('scripts')
 </body>
 </html>

@@ -3,12 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasRoles, HasPermissions;
 
+    public static $rules = [
+        'email' => 'required|email|unique:admins',
+        'password' => 'required|min:6',
+    ];
     /**
      * @var array|bool|mixed|string|null
      */
@@ -21,10 +27,20 @@ class Admin extends Model
         'password',
         'remember_token',
     ];
-    protected $table = 'admins';
     // add validations
-    public static $rules = [
-        'email' => 'required|email|unique:admins',
-        'password' => 'required|min:6',
-    ];
+    protected $table = 'admins';
+
+    // auto assign as admin
+    public static function boot()
+    {
+        parent::boot();
+        static::created(function ($admin) {
+            $admin->assignAsAdmin();
+        });
+    }
+
+    public function assignAsAdmin(): void
+    {
+        $this->assignRole('admin');
+    }
 }

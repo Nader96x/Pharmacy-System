@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_main')->default(false);
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('area_id')->constrained('areas');
-            $table->unique(['user_id','is_main']);
+            $table->unique(['user_id', 'is_main'], 'unique_user_addresses_is_main');
             $table->timestamps();
         });
     }
