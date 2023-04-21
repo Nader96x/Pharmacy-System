@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserAddressController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,10 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class,'logout']);
 
+
+Route::prefix('/users')->middleware('auth:sanctum')->group(function () {
+   Route::put('/{user}',[UserController::class,'update'])->name('users.update');
+});
 
 Route::prefix('/addresses')->group(function () {
     Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
@@ -27,3 +33,4 @@ Route::prefix('/addresses')->group(function () {
     Route::put('/{address}', [UserAddressController::class, 'update'])->name('addresses.update');
     Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
+
