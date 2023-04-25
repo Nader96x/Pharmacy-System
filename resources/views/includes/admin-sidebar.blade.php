@@ -29,6 +29,65 @@
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
             <li class="nav-item menu-open">
+                <ul class="nav nav-treeview">
+                    @role('admin')
+                    <li class="nav-item">
+                        <a href="{{route("pharmacies.index")}}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Pharmacies</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('areas.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Areas</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('addresses.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>User Addresses</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @role('admin|owner')
+                    <li class="nav-item">
+                        <a href="{{ route('doctors.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Doctors</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('users.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @role('admin|owner|doctor')
+
+                    <li class="nav-item">
+                        <a href="{{ route('medicines.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Medicines</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Orders</p>
+                        </a>
+                    </li>
+                    @endrole
+                    @if(Auth::user()->hasRole('admin|owner'))
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Revenue</p>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
                 <a href="#" class="nav-link active">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
@@ -83,7 +142,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('users.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Users</p>
                         </a>
