@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
+
    protected function sendResponse($response, $code = 200, $status = 'success'): JsonResponse
    {
        return response()->json(['data'=>$response,'status'=>$status,'code'=>$code]);
    }
-    protected function sendError($error, $code = 200, $status = 'success'): JsonResponse
+    protected function sendError($error, $code = 500, $status = 'error'): JsonResponse
     {
         return response()->json(['error'=>$error,'status'=>$status,'code'=>$code]);
     }

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 
 class AuthController extends BaseController
 {
@@ -25,6 +25,7 @@ class AuthController extends BaseController
            $user->image = $request->file('image')->store('images','public');
        }
        $user->save();
+        event(new Registered($user));
 
         return $this->sendResponse($user);
 
@@ -32,9 +33,8 @@ class AuthController extends BaseController
     public function login(LoginRequest $request){
         $user = User::where(['email'=> $request->email])->first();
         if (!$user || !Hash::check($request->password , $user->password) )
-            return $this->sendError('The provided credentials are incorrect');
-
-
+            return $this->sendError('The provided credentials are incorrect',403);
+            $user->update([ 'last_login'=> Carbon::now() ]);
             $token = $user->createToken($request->email)->plainTextToken;
             return $this->sendResponse(['user'=>$user,'token' => $token]);
 
