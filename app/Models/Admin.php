@@ -35,12 +35,7 @@ class Admin extends Authenticatable
     {
         parent::boot();
         static::created(function ($admin) {
-            $admin->assignAsAdmin();
+            $admin->assignRole('admin');
         });
-    }
-
-    public function assignAsAdmin(): void
-    {
-        $this->assignRole('admin');
     }
 }
