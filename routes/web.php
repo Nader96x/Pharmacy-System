@@ -69,5 +69,17 @@ Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
     });
 });
 
+Route::prefix('/doctors')->group(function () {
+    Route::get('/', [\App\Http\Controllers\DoctorController::class, 'index'])->name('doctors.index');
+    Route::delete('/{id}', [\App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctors.destroy');
+    Route::get('/create', [\App\Http\Controllers\DoctorController::class, 'create'])->name('doctors.create');
+    Route::post('/', [\App\Http\Controllers\DoctorController::class, 'store'])->name('doctors.store');
+
+    Route::get('/{id}/edit', [\App\Http\Controllers\DoctorController::class, 'edit'])->name('doctors.edit');
+    Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'update'])->name('doctors.update');
+    Route::put('/{id}/ban',[\App\Http\Controllers\DoctorController::class, 'ban'])->name('doctors.ban');
+    Route::put('/{id}/unban',[\App\Http\Controllers\DoctorController::class, 'unban'])->name('doctors.unban');
+});
+
 
 Auth::routes(['register' => false]);
