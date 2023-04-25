@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 
 
 class DoctorController extends Controller
@@ -41,22 +41,23 @@ class DoctorController extends Controller
             'email' => 'required|email|unique:doctors,email',
             'password' => 'required',
         ]);
-
+//        dd($request->all());
         $doctor = new Doctor;
         $doctor->national_id = $request->national_id;
         $doctor->name = $request->name;
         $doctor->pharmacy_id = $request->pharmacy_id;
         $doctor->email = $request->email;
         $doctor->password = Hash::make($request->password);
-
+//        dd($request->image);
         if ($request->has('image')) {
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             Image::make($image)->resize(300, 300)->save(public_path('images/doctors' . $filename));
             $doctor->image = 'images/doctors' . $filename;
         }
-
+//        dd($request->image, $doctor);
         $doctor->save();
+        $doctor->assignRole('doctor');
 
         return redirect()->route('doctors.index')->with('success', 'Doctor created successfully.');
 
@@ -117,8 +118,9 @@ class DoctorController extends Controller
      * Remove the specified resource from storage.
      */
 
-        public function destroy($id){
-            $doctor = Doctor::find($id);
+    public function destroy($id)
+    {
+        $doctor = Doctor::find($id);
         // Delete the image file associated with the doctor (if it exists)
         if ($doctor->image && file_exists(public_path($doctor->image))) {
             unlink(public_path($doctor->image));

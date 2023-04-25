@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Cog\Laravel\Ban\Traits\Bannable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
 class
 Doctor extends Model
 {
-    use HasFactory, HasRoles,Bannable;
+    use HasFactory, HasRoles, Bannable;
 
+    protected $table = 'doctors';
+    protected $guard_name = 'web';
     protected $fillable = [
         'national_id',
         'image',
@@ -33,6 +34,7 @@ Doctor extends Model
         'banned_at',
 
     ];
+
     public function pharmacy()
     {
         return $this->belongsTo(Pharmacy::class);
