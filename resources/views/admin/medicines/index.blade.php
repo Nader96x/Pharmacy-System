@@ -47,7 +47,7 @@
                             Price ($)
                         </th>
                         <th>
-                            Cost ($)
+                            Type
                         </th>
 
                         <th style="width: 30%">
@@ -67,7 +67,7 @@
                                 {{$medicine['price']}}
                             </td>
                             <td>
-                                {{$medicine['cost']}}
+                                {{$medicine->type->name}}
                             </td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{route('medicines.show',$medicine['id'])}}">

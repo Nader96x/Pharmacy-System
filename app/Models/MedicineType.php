@@ -5,18 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Medicine extends Model
+class MedicineType extends Model
 {
     use HasFactory;
 
+    protected $table = 'medicines_types';
+
     protected $fillable = [
         'name',
-        'price',
-        'type_id'
     ];
-
-    public function type()
-    {
-        return $this->belongsTo(MedicineType::class);
-    }
 }

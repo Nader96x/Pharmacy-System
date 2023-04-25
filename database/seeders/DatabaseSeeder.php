@@ -4,11 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use Database\Factories\MedicineFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,13 +14,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::all()->each->delete();
-        Role::all()->each->delete();
-        $this->command->info('Creating roles.');
-        Role::all()->each->delete();
-        $admin = Role::create(['name' => 'admin']);
-        $owner = Role::create(['name' => 'owner']);
-        $doctor = Role::create(['name' => 'doctor']);
+        /* Permission::all()->each->delete();
+         Role::all()->each->delete();
+         $this->command->info('Creating roles.');
+         Role::all()->each->delete();
+         $admin = Role::create(['name' => 'admin']);
+         $owner = Role::create(['name' => 'owner']);
+         $doctor = Role::create(['name' => 'doctor']);
+
+        */
         /*
                 $this->command->info('Creating permissions.');
 
@@ -59,11 +58,17 @@ class DatabaseSeeder extends Seeder
                 // perrimissions for owner
                 $owner->givePermissionTo(Permission::all()->except(['areas', 'pharmacies', 'owners', 'users']));
                 */
+
+        DB::table("medicines_types")->count() > 0
+            ?
+            $this->command->warn('Medicines types table is not empty, therefore NOT seeding!')
+            :
+            $this->call(MedicinesTypesSeeder::class);
         DB::table("medicines")->count() > 0
             ?
             $this->command->warn('Medicines table is not empty, therefore NOT seeding!')
             :
-            MedicineFactory::new()->count(100)->create();
+            $this->call(MedicinesSeeder::class);
 
         DB::table("admins")->count() > 0
             ?
