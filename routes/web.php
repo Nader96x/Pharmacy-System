@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\UserAddressController;
+use App\Models\OrderMedicineQuantity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,17 @@ Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
         Route::get('/{id}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
         Route::put('/{id}', [MedicineController::class, 'update'])->name('medicines.update');
         Route::get('/{id}', [MedicineController::class, 'show'])->name('medicines.show');
+    });
+});
+Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
+    Route::prefix('/orders')->group(function () {
+        Route::get('/', [OrderMedicineQuantity::class, 'index'])->name('orders.index');
+//        Route::get('/create', [MedicineController::class, 'create'])->name('medicines.create');
+//        Route::post('/', [MedicineController::class, 'store'])->name('medicines.store');
+//        Route::delete('/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
+//        Route::get('/{id}/edit', [MedicineController::class, 'edit'])->name('medicines.edit');
+//        Route::put('/{id}', [MedicineController::class, 'update'])->name('medicines.update');
+//        Route::get('/{id}', [MedicineController::class, 'show'])->name('medicines.show');
     });
 });
 Route::group(['middleware' => ['role:admin']], function () {
