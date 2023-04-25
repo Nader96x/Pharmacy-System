@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,16 @@ Route::prefix('/doctors')->group(function () {
     Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'update'])->name('doctors.update');
     Route::put('/{id}/ban',[\App\Http\Controllers\DoctorController::class, 'ban'])->name('doctors.ban');
     Route::put('/{id}/unban',[\App\Http\Controllers\DoctorController::class, 'unban'])->name('doctors.unban');
+});
+Route::prefix('owners/')->group(function () {
+    Route::get('/', [\App\Http\Controllers\OwnerController::class, 'index'])->name('owners.index');
+    Route::delete('/{id}', [\App\Http\Controllers\OwnerController::class, 'destroy'])->name('owners.destroy');
+    Route::get('/create', [\App\Http\Controllers\OwnerController::class, 'create'])->name('owners.create');
+    Route::post('/', [\App\Http\Controllers\OwnerController::class, 'store'])->name('owners.store');
+    Route::get('/{id}/edit', [\App\Http\Controllers\OwnerController::class, 'edit'])->name('owners.edit');
+    Route::put('/{id}', [\App\Http\Controllers\OwnerController::class, 'update'])->name('owners.update');
+    Route::put('/{id}/ban',[\App\Http\Controllers\OwnerController::class, 'ban'])->name('owners.ban');
+    Route::put('/{id}/unban',[\App\Http\Controllers\OwnerController::class, 'unban'])->name('owners.unban');
 });
 
 

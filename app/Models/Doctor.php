@@ -38,7 +38,7 @@ Doctor extends Model
         return $this->belongsTo(Pharmacy::class);
     }
 
-    public function doctor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function doctor()
     {
         return $this->belongsTo(Doctor::class);
     }
