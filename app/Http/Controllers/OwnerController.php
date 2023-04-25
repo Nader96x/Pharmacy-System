@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
-
+use Intervention\Image\Facades\Image;
 
 
 class OwnerController extends Controller
@@ -16,7 +15,7 @@ class OwnerController extends Controller
      */
     public function index()
     {
-        $owners = Doctor::paginate(4);
+        $owners = Doctor::role('owner')->paginate(4);
         return view('owners.index', compact('owners'));
     }
 
@@ -57,6 +56,7 @@ class OwnerController extends Controller
         }
 
         $owner->save();
+        $owner->assignRole('owner');
 
         return redirect()->route('owners.index')->with('success', 'Owner created successfully.');
 
@@ -117,7 +117,8 @@ class OwnerController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $owner = Doctor::find($id);
         // Delete the image file associated with the doctor (if it exists)
         if ($owner->image && file_exists(public_path($owner->image))) {

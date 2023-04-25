@@ -14,7 +14,8 @@ class CreateAdmin extends Command
      */
     protected $signature = 'createAdmin
                             {--email= : The email address of the admin user.}
-                            {--password= : The password for the admin user.}';
+                            {--password= : The password for the admin user.}
+                            {--name= : The name for the admin user.}';
 
     /**
      * The console command description.
@@ -30,14 +31,17 @@ class CreateAdmin extends Command
     {
         $email = $this->option('email');
         $password = $this->option('password');
+        $name = $this->option('name');
         if ($this->validateInput()) {
             $admin = new Admin;
             $admin->email = $email;
             $admin->password = bcrypt($password);
+            $admin->name = $name ? $name : 'Admin';
             $admin->save();
 
             $this->info("Admin created successfully.");
             $this->info("Email: $email");
+            $this->info("Name: $admin->name");
 //            $this->info("Password: $password");
         }
 

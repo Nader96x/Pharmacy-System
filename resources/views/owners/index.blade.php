@@ -3,10 +3,12 @@
 @section('content')
     <div class="container">
         <div class="row">
+
             <div class="col-md-12">
                 <h1>Owners</h1>
                 <a href="{{ route('owners.create') }}" class="btn btn-primary">Add Owner</a>
                 <hr>
+                @include('partials.flash-message')
                 <table class="table">
                     <thead>
                     <tr>
@@ -16,7 +18,7 @@
                         <th>Email</th>
                         {{--                        <th>Password</th>--}}
                         <th>Created At</th>
-                        <th>Is Banned </th>
+                        <th>Is Banned</th>
                         <th>Ban</th>
                         <th>edit</th>
                         <th>delete</th>
@@ -51,10 +53,13 @@
                                 <a href="{{ route('owners.edit', $owner->id) }}" class="btn btn-primary">Edit</a>
                             </td>
                             <td>
-                                <form action="{{ route('owners.destroy', $owner->id) }}" method="POST" style="display: inline-block;">
+                                <form action="{{ route('owners.destroy', $owner->id) }}" method="POST"
+                                      style="display: inline-block;">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete this record ?')" >Delete</button>
+                                    <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure to delete this record ?')">Delete
+                                    </button>
                                 </form>
                             </td>
                         </tr>

@@ -67,6 +67,17 @@
                             <p>User Addresses</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('owners.index') }}" class="nav-link">
+
+                            @if(in_array(request()->route()->getName(),['owners.index', 'owners.create', 'owners.edit', 'owners.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
+                            <p>Owners</p>
+                        </a>
+                    </li>
                     @endrole
                     @role('admin|owner')
                     <li class="nav-item">

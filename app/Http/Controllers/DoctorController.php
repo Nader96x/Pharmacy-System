@@ -16,7 +16,8 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors = Doctor::paginate(4);
+        // doctors with rule doctor
+        $doctors = Doctor::role('doctor')->paginate(10);
         return view('doctors.index', compact('doctors'));
     }
 

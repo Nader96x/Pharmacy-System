@@ -6,6 +6,7 @@
             <div class="col-md-12">
                 <h1>Create Owner</h1>
                 <hr>
+                @include('partials.flash-message')
                 <form method="POST" action="{{ route('owners.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">

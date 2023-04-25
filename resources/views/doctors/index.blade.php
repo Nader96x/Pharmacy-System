@@ -7,6 +7,7 @@
                 <h1>Doctors</h1>
                 <a href="{{ route('doctors.create') }}" class="btn btn-primary">Add Doctor</a>
                 <hr>
+                @include('partials.flash-message')
                 <table class="table">
                     <thead>
                     <tr>
@@ -14,9 +15,9 @@
                         <th>Avatar Image</th>
                         <th>Name</th>
                         <th>Email</th>
-{{--                        <th>Password</th>--}}
+                        {{--                        <th>Password</th>--}}
                         <th>Created At</th>
-                        <th>Is Banned </th>
+                        <th>Is Banned</th>
                         <th>Ban</th>
                         <th>edit</th>
                         <th>delete</th>
@@ -29,7 +30,7 @@
                             <td><img src="{{ $doctor->image }}" width="50" height="50" alt="Avatar"></td>
                             <td>{{ $doctor->name }}</td>
                             <td>{{ $doctor->email }}</td>
-{{--                            <td>{{ $doctor->password }}</td>--}}
+                            {{--                            <td>{{ $doctor->password }}</td>--}}
                             <td>{{ $doctor->created_at }}</td>
                             <td>{{ $doctor->is_banned }}</td>
                             <td>
@@ -51,10 +52,13 @@
                                 <a href="{{ route('doctors.edit', $doctor->id) }}" class="btn btn-primary">Edit</a>
                             </td>
                             <td>
-                                <form action="{{ route('doctors.destroy', $doctor->id) }}" method="POST" style="display: inline-block;">
+                                <form action="{{ route('doctors.destroy', $doctor->id) }}" method="POST"
+                                      style="display: inline-block;">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete this record ?')" >Delete</button>
+                                    <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure to delete this record ?')">Delete
+                                    </button>
                                 </form>
                             </td>
                         </tr>
