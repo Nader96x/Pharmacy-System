@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\User;
+use App\Notifications\InactiveUserForMonthNotification;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
+
+class NotifyInactiveUsersForMonth extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'notify:users-not-logged-in-for-month';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Send email notification to inactive users who haven\'t logged in for the past month.';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $users = User::where('last_login','<',Carbon::now()->subMonth())->get();
+        foreach ($users as $user) {
+            Notification::route('mail', $user->email)
+                ->notify(new InactiveUserForMonthNotification());
+
+        }
+    }
+}

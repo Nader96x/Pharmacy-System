@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,8 @@ Route::group(['middleware' => ['role:admin']], function () {
 
 Route::group(['middleware' => ['role:admin']], function () {
     Route::prefix('/users')->group(function () {
-
+    Route::get('/',[UserController::class,'index'])->name('users.index');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
