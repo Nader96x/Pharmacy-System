@@ -29,23 +29,41 @@
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
             <li class="nav-item menu-open">
+
+                {{--                Begin--}}
+
+
                 <ul class="nav nav-treeview">
                     @role('admin')
                     <li class="nav-item">
                         <a href="{{route("pharmacies.index")}}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+                            @if(in_array(request()->route()->getName(),['pharmacies.index', 'pharmacies.create', 'pharmacies.edit', 'pharmacies.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Pharmacies</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('areas.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['areas.index', 'areas.create', 'areas.edit', 'areas.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Areas</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('addresses.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['addresses.index', 'addresses.create', 'addresses.edit', 'addresses.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>User Addresses</p>
                         </a>
                     </li>
@@ -53,13 +71,23 @@
                     @role('admin|owner')
                     <li class="nav-item">
                         <a href="{{ route('doctors.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['doctors.index', 'doctors.create', 'doctors.edit', 'doctors.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Doctors</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('users.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['users.index', 'users.create', 'users.edit', 'users.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Users</p>
                         </a>
                     </li>
@@ -68,13 +96,23 @@
 
                     <li class="nav-item">
                         <a href="{{ route('medicines.index') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['medicines.index', 'medicines.create', 'medicines.edit', 'medicines.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Medicines</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
+
+                            @if(in_array(request()->route()->getName(),['orders.index', 'orders.create', 'orders.edit', 'orders.show']))
+                                <i class="fas fa-circle nav-icon"></i>
+                            @else
+                                <i class="far fa-circle nav-icon"></i>
+                            @endif
                             <p>Orders</p>
                         </a>
                     </li>
@@ -82,12 +120,20 @@
                     @if(Auth::user()->hasRole('admin|owner'))
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
+
+                                @if(in_array(request()->route()->getName(),['revenues.index', 'revenues.create', 'revenues.edit', 'revenues.show']))
+                                    <i class="fas fa-circle nav-icon"></i>
+                                @else
+                                    <i class="far fa-circle nav-icon"></i>
+                                @endif
                                 <p>Revenue</p>
                             </a>
                         </li>
                     @endif
                 </ul>
+
+
+                {{--                END--}}
                 <a href="#" class="nav-link active">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
