@@ -12,10 +12,14 @@ class PharmacyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $allPharmacies = Pharmacy::withTrashed()->paginate(5);
-        return view('pharmacies.index', ['pharmacies' => $allPharmacies]);
+        if ($request->ajax()) {
+            return datatables()->collection(Pharmacy::withTrashed()->with(['area' => function ($query) {
+                $query->select('id', 'name');
+            }])->get())->toJson();
+        }
+        return view('pharmacies.index');
     }
 
     /**

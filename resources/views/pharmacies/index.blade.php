@@ -40,70 +40,109 @@
                             <th style="width: 20%">Logo</th>
                             <th style="width: 20%">Priority</th>
                             <th style="width: 20%">Area</th>
-                            <th style="width: 30%"></th>
+                            <th style="width: 30%">Actions</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        @foreach($pharmacies as $pharmacy)
-                            <tr>
-                                <td>
-                                    {{ $pharmacy->id }}
-                                </td>
-                                <td>
-                                    {{ $pharmacy->name }}
-                                </td>
-                                <td>
-                                    <img src="{{ asset($pharmacy->avatar) }}" alt="Avatar" width="50">
-                                </td>
-                                <td>
-                                    {{ $pharmacy->priority }}
-                                </td>
-                                <td>
-                                    {{ $pharmacy->area->name }}
-                                </td>
-                                @if ($pharmacy->deleted_at)
-                                    <td class="project-actions text-right">
-                                        <form method="POST" action="{{ route('pharmacies.restore', $pharmacy->id) }}" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success rounded">
-                                                <i class="fas fa-undo"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline" onclick="return confirm('Are you sure you want to delete this pharmacy?')">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger rounded">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td></td>
-                                @else
-                                    <td class="project-actions text-right">
-                                        <a class="btn btn-primary rounded" href="{{ route('pharmacies.edit', $pharmacy->id) }}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                    <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-danger rounded">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                                    <td></td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        </tbody>
                     </table>
-                    <br> {{ $pharmacies->links() }}
                 </div>
             </div>
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+    <script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
+    <script>
+        $('table').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('pharmacies.index') }}",
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {
+                    data: 'avatar',
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, full, meta) {
+                        return '<img src="' + data + '" alt="' + full.name + '" width="50">';
+                    }
+                },
+                {data: 'priority'},
+                {data: 'area.name'},
+                {
+                    data: 'id', orderable: false, searchable: false,
+                    render: function (data, type, full, meta) {
+                        let restoreBtn = '<form method="POST" action="{{ route('pharmacies.restore', ':id') }}" class="d-inline">' +
+                            '@csrf' +
+                            '<button type="submit" class="btn btn-success rounded col-9">' +
+                            '<i class="fas fa-undo"></i>' +
+                            '</button>' +
+                            '</form>';
+                        let deleteBtn = '<form method="POST" action="{{ route('pharmacies.destroy', ':id') }}" class="d-inline">' +
+                            '@csrf' +
+                            '@method('delete')' +
+                            '<button type="submit" class="btn btn-danger rounded col-4" onclick="sweetDelete(event)" data-id="{{ ':id' }}">' +
+                            '<i class="fas fa-trash"></i>' +
+                            '</button>' +
+                            '</form>';
+                        let actionsTd = '<td class="project-actions text-right">';
+                        if (full.deleted_at) {
+                            actionsTd += restoreBtn.replaceAll(':id', data);
+                        } else {
+                            actionsTd += '<a class="btn btn-primary rounded mr-2 col-4" href="{{ url('pharmacy') }}/' + data + '/edit">' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</a>';
+                            actionsTd += '</td>';
+                            actionsTd += '<td class="col">' + deleteBtn.replaceAll(':id', data) + '</td>';
+                            actionsTd += '<td class="col"></td>';
+                        }
+                        return actionsTd;
+                    }
+                }
+            ]
+        });
+    </script>
+    <script>
+        function sweetDelete(e) {
+            e.preventDefault();
+            const id = $(e.target).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to delete this pharmacy?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/pharmacy/' + id,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "_method": 'DELETE'
+                        },
+                        success: function (data) {
+                            $('table').DataTable().ajax.reload();
+                            Swal.fire(
+                                'Deleted!',
+                                'The record has been deleted.',
+                                'success'
+                            );
+                        },
+                        error: function (data) {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting the record.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

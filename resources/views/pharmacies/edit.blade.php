@@ -26,7 +26,8 @@
                                 @endif
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Logo</label>
+                                <label class="form-label">Logo</label><br>
+                                <img src="{{ asset($pharmacy->avatar) }}" alt="Avatar" width="80"><br><br>
                                 <input type="file" class="form-control" name="avatar" value="{{ $pharmacy['avatar'] }}">
                             </div>
                             <div class="mb-3">
