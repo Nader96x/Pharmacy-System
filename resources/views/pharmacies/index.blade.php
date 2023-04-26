@@ -19,7 +19,6 @@
 
     <section class="content">
         <div class="container-fluid">
-{{--            @include('partials.flash-message')--}}
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
@@ -36,9 +35,9 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th style="width: 1%">ID</th>
-                            <th style="width: 30%">Name</th>
-                            <th style="width: 20%">Avatar</th>
+                            <th style="width: 5%">ID</th>
+                            <th style="width: 20%">Name</th>
+                            <th style="width: 20%">Logo</th>
                             <th style="width: 20%">Priority</th>
                             <th style="width: 20%">Area</th>
                             <th style="width: 30%"></th>
@@ -54,7 +53,7 @@
                                     {{ $pharmacy->name }}
                                 </td>
                                 <td>
-                                    {{ $pharmacy->avatar }}
+                                    <img src="{{ asset($pharmacy->avatar) }}" alt="Avatar" width="50">
                                 </td>
                                 <td>
                                     {{ $pharmacy->priority }}
@@ -62,22 +61,8 @@
                                 <td>
                                     {{ $pharmacy->area->name }}
                                 </td>
-                                <td class="project-actions text-right">
-                                    <a class="btn btn-primary rounded" href="{{ route('pharmacies.edit', $pharmacy->id) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
                                 @if ($pharmacy->deleted_at)
-                                <td>
-                                    <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline" onclick="return confirm('Are you sure you want to delete this pharmacy?')">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-danger rounded">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                                    <td>
+                                    <td class="project-actions text-right">
                                         <form method="POST" action="{{ route('pharmacies.restore', $pharmacy->id) }}" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-success rounded">
@@ -85,7 +70,22 @@
                                             </button>
                                         </form>
                                     </td>
-                                    @else
+                                    <td>
+                                        <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline" onclick="return confirm('Are you sure you want to delete this pharmacy?')">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger rounded">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td></td>
+                                @else
+                                    <td class="project-actions text-right">
+                                        <a class="btn btn-primary rounded" href="{{ route('pharmacies.edit', $pharmacy->id) }}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
                                     <td>
                                     <form method="POST" action="{{ route('pharmacies.destroy', $pharmacy->id) }}" class="d-inline">
                                         @csrf
