@@ -16,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "realrashid/sweet-alert": "^6.0",
         "spatie/laravel-permission": "^5.10",
+        "stripe/stripe-php": "^10.12",
         "webpatser/laravel-countries": "dev-master"
     },
     "require-dev": {
