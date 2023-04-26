@@ -13,36 +13,52 @@ use Illuminate\Support\Str;
 
 class ForgetPasswordController extends BaseController
 {
-    public function forgetPassword(Request $request){
-        $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-        if( $status === Password::RESET_LINK_SENT)
-          return  $this->sendResponse(['status' => __($status)]);
+    public function forgetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return $this->sendError([
+                'message' => 'We can\'t find a user with that email address.'
+            ], 404);
+        }
+        $broker = Password::broker();
+        $broker->sendResetLink(['email' => $user->email]);
+        return $this->sendResponse([
+            'message' => 'We have e-mailed your password reset link!'
+        ]);
+
     }
 
-    public function resetPassword(Request $request){
+    public function resetPassword(Request $request)
+    {
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:8|confirmed'
         ]);
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return $this->sendError([
+                'message' => 'We can\'t find a user with that email address.'
+            ], 404);
+        }
+        $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($request->password)
                 ])->setRememberToken(Str::random(60));
                 $user->save();
-                event(new PasswordReset($user));
-            }
-        );
-        if( $status === Password::PASSWORD_RESET)
-            return $this->sendResponse('password updated');
-        else
-           return  $this->sendError(['email' => [__($status)]]);
+            });
+        if ($status == Password::INVALID_TOKEN) {
+            return  $this->sendError(['message' => 'This password reset token is invalid.'],400);
+        }
 
-
+        if ($status == Password::PASSWORD_RESET) {
+            $user->tokens()->delete();
+          return $this->sendResponse([ 'message' => 'Password reset successfully']);
+        }
     }
 }

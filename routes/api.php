@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ForgetPasswordController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\UserAddressController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -21,7 +22,7 @@ Route::post('/register', [AuthController::class,'register']);
 Route::post('/login', [AuthController::class,'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class,'logout']);
 Route::post('/forget-password', [ForgetPasswordController::class,'forgetPassword']);
-Route::post('/rest-password', [ForgetPasswordController::class,'resetPassword']);
+Route::post('/reset-password', [ForgetPasswordController::class,'resetPassword']);
 
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -40,5 +41,10 @@ Route::prefix('/addresses')->group(function () {
     Route::get('{address}', [UserAddressController::class,'show'])->name('addresses.show');
     Route::put('/{address}', [UserAddressController::class, 'update'])->name('addresses.update');
     Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
+});
+Route::prefix('orders')->middleware(['auth:sanctum','verified'])->group(function(){
+   Route::get('/',[OrderController::class,'index'])->name('orders.index');
+   Route::post('/',[OrderController::class,'store'])->name('orders.store');
+
 });
 
