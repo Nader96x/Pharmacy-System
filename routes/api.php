@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ForgetPasswordController;
 use App\Http\Controllers\Api\UserAddressController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class,'register']);
 Route::post('/login', [AuthController::class,'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class,'logout']);
+Route::middleware('guest')->post('/forget-password', [ForgetPasswordController::class,'forgetPassword']);
+Route::middleware('guest')->post('/rest-password', [ForgetPasswordController::class,'resetPassword']);
+
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -27,7 +31,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::prefix('/users')->middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/{user}',[UserController::class,'show'])->name('users.show');
-   Route::put('/{user}',[UserController::class,'update'])->name('users.update');
+   Route::put('/',[UserController::class,'update'])->name('users.update');
 });
 
 Route::prefix('/addresses')->group(function () {

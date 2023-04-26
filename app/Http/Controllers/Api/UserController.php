@@ -6,6 +6,7 @@ use App\Http\Requests\User\updateUserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends BaseController
@@ -28,10 +29,9 @@ class UserController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateUserRequest $request, string $id)
+    public function update(updateUserRequest $request)
     {
-        $user = User::where('id', $id)->first();
-        if ($user) {
+        $user = Auth::user()->first();
             if ($request->hasFile('image')) {
                 $old_image = $user->image;
                 $user->image = $request->file('image')->store('images', 'public');
@@ -39,10 +39,8 @@ class UserController extends BaseController
             }
             $user->fill($request->validated());
             $user->save();
-            return $this->sendResponse('Update');
-        } else {
-            return $this->sendError('User not found.', 404);
-        }
+            return $this->sendResponse($user);
+
     }
 
     /**
