@@ -30,7 +30,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
 
 Route::prefix('/users')->middleware(['auth:sanctum','verified'])->group(function () {
-    Route::get('/{user}',[UserController::class,'show'])->name('users.show');
+    Route::get('/',[UserController::class,'show'])->name('users.show');
    Route::put('/',[UserController::class,'update'])->name('users.update');
 });
 
