@@ -55,6 +55,9 @@ class LoginController extends Controller
         }
 
         $credentials = $request->only($this->username(), 'password');
+        //change gurard to admins
+
+//        dd($this->guard());
 
         if (Auth::guard('web')->attempt($credentials)) {
             if ($request->hasSession()) {
@@ -63,10 +66,10 @@ class LoginController extends Controller
 
             return $this->sendLoginResponse($request);
         } elseif (Auth::guard('doctor')->attempt($credentials)) {
+            Auth::setDefaultDriver('doctor');
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
-            
             return $this->sendLoginResponse($request);
         }
         // If the login attempt was unsuccessful we will increment the number of attempts
