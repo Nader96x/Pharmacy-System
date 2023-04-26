@@ -6,17 +6,21 @@ use App\Http\Requests\Area\AddAreaRequest;
 use App\Http\Requests\Area\EditAreaRequest;
 use App\Models\Area;
 use App\Models\Country;
+use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-//        dd(auth()->user()->getAllPermissions(), auth()->user()->getRoleNames(), auth()->user()->hasRole('admin'), auth()->user()->Permissions());
-        $areas = Area::first()->paginate(10);
-        return view('admin.areas.index', compact('areas'));
+        if ($request->ajax()) {
+            return datatables()->collection(Area::with(['country' => function ($query) {
+                $query->select('id', 'name');
+            }])->get())->toJson();
+        }
+        return view('admin.areas.index');
     }
 
     /**

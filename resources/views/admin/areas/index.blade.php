@@ -2,122 +2,139 @@
 
 @section('content')
 
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Areas</h1>
-                </div><!-- /.col -->
+                    <h1>Areas</h1>
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active">Areas</li>
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" href="{{route('medicines.index')}}">Areas</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            @include('partials.flash-message')
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <a class="btn btn-primary btn-sm" href="{{ route('areas.create') }}">
-                            <i class="fas fa-plus">
-                            </i>
-                            New Area
-                        </a>
-                    </h3>
-
                 </div>
-                <div class="card-body p-0">
-                    <table class="table table-striped projects">
-                        <thead>
-                        <tr>
-                            <th style="width: 1%">
-                                #
-                            </th>
-                            <th style="width: 20%">
-                                Area Name
-                            </th>
-                            <th style="width: 30%">
-                                Country
-                            </th>
-                            <th style="width: 30%">
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($areas as $area)
-                                <tr>
-                                    <td>
-                                        {{ $area->id }}
-                                    </td>
-                                    <td>
-                                        {{ $area->name }}
-                                    </td>
-                                    <td>
-                                        {{ $area->country->name }}
-                                    </td>
-                                    <td class="project-actions text-right">
-                                        <a class="btn btn-info btn-sm" href="{{ route('areas.edit', $area->id) }}">
-                                            <i class="fas fa-pencil-alt">
-                                            </i>
-                                            Edit
-                                        </a>
-                                        <form method="POST" action="{{ route('areas.destroy', $area->id) }}" class="d-inline">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-sm btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
-                                                <i class="fas fa-trash">
-                                                </i>
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    <div class="d-flex">
-                        {!! $areas->links() !!}
-                    </div>
-                </div>
-                <!-- /.card-body -->
             </div>
         </div>
     </section>
+
+    <section class="content">
+        @include('partials.flash-message')
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <a class="btn btn-primary btn-sm" href="{{ route('areas.create') }}">
+                        <i class="fas fa-plus">
+                        </i>
+                        New Area
+                    </a>
+                </h3>
+
+            </div>
+            <div class="card-body p-3">
+                <table id="table" class="table table-striped table-borderless  text-center">
+                    <thead>
+                    <tr>
+                        <th style="width: 1%">
+                            #
+                        </th>
+                        <th style="width: 20%">
+                            Area Name
+                        </th>
+                        <th style="width: 30%">
+                            Country
+                        </th>
+                        <th style="width: 30%">
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
 @endsection
-
-
 
 @section('scripts')
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-    <script type="text/javascript">
+    <script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
+    <script>
+        $('table').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('areas.index') }}",
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {data: 'country.name'},
+                {
+                    data: 'id', orderable: false, searchable: false,
+                    render: function (data, type, full, meta) {
+                        return `
+                        <a class="btn btn-info btn-sm" href="{{route('areas.edit',':id')}}">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                            Edit
+                        </a>
+                        <button class="btn btn-danger btn-sm swal-delete" onclick="sweetDelete(event)"
+                                data-id="{{ ':id' }}">
+                            <i class="fas fa-trash-alt"></i> Delete
+                            </button>`.replaceAll(':id', data);
 
-        $('.show_confirm').click(function(event) {
-            let form =  $(this).closest("form");
-            let name = $(this).data("name");
-            event.preventDefault();
-            swal({
-                title: `Are you sure you want to delete this record?`,
-                text: "If you delete this, it will be gone forever.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                    }
-                });
-        });
+
+                    },
+                }
+            ]
+        })
+        ;
     </script>
+    <script>
+        // Handle the SweetAlert confirmation dialog for delete actions
+        function sweetDelete(e) {
+            e.preventDefault();
 
+            const id = $(e.target).data('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    // Send the delete request
+                    $.ajax({
+                        type: 'POST',
+                        url: '/areas/' + id,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "_method": 'DELETE'
+                        },
+                        success: function (data) {
+                            $('table').DataTable().ajax.reload();
+                            Swal.fire(
+                                'Deleted!',
+                                'The record has been deleted.',
+                                'success'
+                            );
+
+                        },
+                        error: function (data) {
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while deleting the record.',
+                                'error'
+                            );
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
 @endsection
