@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" href="{{route('medicines.index')}}">Areas</li>
+                        <li class="breadcrumb-item active" href="{{route('areas.index')}}">Areas</li>
                     </ol>
                 </div>
             </div>
@@ -86,8 +86,7 @@
                     },
                 }
             ]
-        })
-        ;
+        });
     </script>
     <script>
         // Handle the SweetAlert confirmation dialog for delete actions
@@ -136,5 +135,10 @@
                 }
             });
         }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $(".alert").slideDown(300).delay(5000).slideUp(300);
+        });
     </script>
 @endsection

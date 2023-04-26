@@ -11,14 +11,22 @@ class UserAddressController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $addresses = UserAddress::first()->paginate(10);
-        if($addresses) {
-            return view('admin.addresses.index', compact('addresses'));
-        }else{
-            return back()->with('error', 'Something Went Wrong');
+        if ($request->ajax()) {
+            return datatables()->collection(UserAddress::with(['user' => function ($query) {
+                $query->select('id', 'name');
+            },'area' => function ($query) {
+                $query->select('id', 'name');
+            }])->get())->toJson();
         }
+        return view('admin.addresses.index');
+//        $addresses = UserAddress::first()->paginate(10);
+//        if($addresses) {
+//            return view('admin.addresses.index', compact('addresses'));
+//        }else{
+//            return back()->with('error', 'Something Went Wrong');
+//        }
     }
 
     /**
