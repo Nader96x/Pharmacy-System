@@ -76,7 +76,7 @@
             columns: [
                 {data: 'id'},
                 {data: 'name'},
-                {data: 'price'},
+                {data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '$'), searchable: true},
                 {data: 'type.name'},
                 {
                     data: 'id', orderable: false, searchable: false,
@@ -87,7 +87,6 @@
                             </i>
                             Edit
                         </a>
-
                         <button class="btn btn-danger btn-sm swal-delete" onclick="sweetDelete(event)"
                                 data-id="{{ ':id' }}">
                             <i class="fas fa-trash-alt"></i> Delete

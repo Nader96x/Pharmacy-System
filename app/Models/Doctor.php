@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Cog\Laravel\Ban\Traits\Bannable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
 class
-Doctor extends Model
+Doctor extends Authenticatable
 {
     use HasFactory, HasRoles, Bannable;
 
+    public $timestamps;
     protected $table = 'doctors';
     protected $guard_name = 'web';
     protected $fillable = [
@@ -24,9 +25,9 @@ Doctor extends Model
         'banned_at',
         'is_banned',
     ];
-
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     protected $dates = [
