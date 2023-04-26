@@ -6,6 +6,7 @@ use App\Http\Requests\User\updateUserRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends BaseController
@@ -15,10 +16,10 @@ class UserController extends BaseController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
         try {
-            $user = User::findOrFail($id);
+            $user = Auth::user();
             return $this->sendResponse($user);
         } catch (ModelNotFoundException $exception) {
             return $this->sendError('User not found.', 404);
