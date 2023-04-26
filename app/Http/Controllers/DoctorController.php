@@ -46,7 +46,7 @@ class DoctorController extends Controller
         $doctor = new Doctor;
         $doctor->national_id = $request->national_id;
         $doctor->name = $request->name;
-        $doctor->pharmacy_id = $request->pharmacy_id;
+        $doctor->pharmacy_id = Auth::user()->pharmacy_id || $request->pharmacy_id;
         $doctor->email = $request->email;
         $doctor->password = Hash::make($request->password);
 //        dd($request->image);

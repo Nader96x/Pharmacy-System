@@ -87,7 +87,7 @@
                             </i>
                             Edit
                         </a>
-                        <button class="btn btn-danger btn-sm swal-delete" onclick="sweetDelete(event)"
+                        <button class="btn btn-danger btn-sm" onclick="sweetDelete(event)"
                                 data-id="{{ ':id' }}">
                             <i class="fas fa-trash-alt"></i> Delete
                             </button>`.replaceAll(':id', data);
