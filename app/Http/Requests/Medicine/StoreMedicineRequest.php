@@ -24,7 +24,7 @@ class StoreMedicineRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|min:3',
             'price' => 'required|integer|min:1',
-            'cost' => 'required|integer|min:1'
+            'type_id' => 'required|integer|exists:medicines_types,id',
         ];
     }
 }

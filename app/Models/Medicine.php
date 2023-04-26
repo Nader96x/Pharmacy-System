@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Medicine extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'price',
-        'cost'
+        'type_id'
     ];
 
-
+    public function type()
+    {
+        return $this->belongsTo(MedicineType::class);
+    }
 }
