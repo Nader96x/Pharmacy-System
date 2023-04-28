@@ -18,23 +18,16 @@ class StripeController extends Controller
 
     public function stripePost(Request $request)
     {
-//        $order = Order::find($request->order_id);
+        $order = Order::find($request->order_id);
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-        /*Stripe\Charge::create([
-            "amount" => $order->total_price,
+//        dd($order);
+        Stripe\Charge::create([
+            "amount" => floatval($order->total_price) * 100,
             "currency" => "usd",
             "source" => $request->stripeToken,
             "description" => "pay for medicines order"
-        ]);*/
-        $link = Stripe\Charge::create([
-            "amount" => 10.00,
-            "currency" => "usd",
-            "source" => $request->stripeToken,
-            "description" => "pay for medicines order"
-
         ]);
-        dd($link);
-
+        
         Session::flash('success', 'Payment successful!');
 
         return to_route('order.orderConfirm', ['id' => $request->order_id]);
