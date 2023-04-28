@@ -13,7 +13,18 @@ class OrderMedicineQuantity extends Model
         'order_id',
         'medicine_id',
         'quantity',
-        'price',
-        'cost'
+        'price'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class);
+    }
+
+    
 }

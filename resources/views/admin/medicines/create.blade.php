@@ -22,9 +22,14 @@
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="name">Cost</label>
-                                <input type="number" id="cost" name="cost" min="1" value="{{ old('cost') }}"
-                                       class="form-control">
+                                <label for="name">Type</label>
+                                {{--                                <input type="number" id="cost" name="cost" min="1" value="{{ $medicine->cost }}" class="form-control"> --}}
+                                <select name="type_id" id="type_id" class="form-control">
+                                    @foreach($types as $type)
+                                        <option
+                                            value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+
                             </div>
 
                             <input type="submit" value="Add" class="btn btn-success">

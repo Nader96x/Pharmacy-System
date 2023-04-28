@@ -10,13 +10,14 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'status',
         'user_id',
-        'doctor_id',
         'pharmacy_id',
+        'doctor_id',
+        'status',
+        'total_price',
         'delivering_address_id',
         'is_insured',
-        'prescription'
+        'prescription',
     ];
 
     public function user()
@@ -24,20 +25,21 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class);
-    }
-
     public function pharmacy()
     {
         return $this->belongsTo(Pharmacy::class);
     }
 
-    public function delivering_address()
+    public function doctor()
     {
-        return $this->belongsTo(UserAddress::class);
+        return $this->belongsTo(Doctor::class);
     }
 
+    public function medicines()
+    {
+        return $this->belongsToMany(Medicine::class, 'order_medicine_quantity', 'order_id', 'medicine_id')
+            ->withPivot('quantity', 'price');
+    }
+    
 
 }

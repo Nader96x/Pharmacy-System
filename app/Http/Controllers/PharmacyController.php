@@ -5,18 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Pharmacy;
 use Illuminate\Http\Request;
+use App\Http\Requests\PharmacyRequest;
 
 class PharmacyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $allPharmacies = Pharmacy::withTrashed()->paginate(5);
-        return view('pharmacies.index', [
-            'pharmacies' => $allPharmacies,
-        ]);
+        if ($request->ajax()) {
+            return datatables()->collection(Pharmacy::withTrashed()->with(['area' => function ($query) {
+                $query->select('id', 'name');
+            }])->get())->toJson();
+        }
+        return view('pharmacies.index');
     }
 
     /**
@@ -24,20 +27,25 @@ class PharmacyController extends Controller
      */
     public function create()
     {
-        //
         $areas = Area::all();
-        return view('pharmacies.create',
-            compact('areas'));
+        return view('pharmacies.create', compact('areas'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PharmacyRequest $request)
     {
-        //
-        $allPharmacies = Pharmacy::create($request->all());
-            return redirect()->route('pharmacies.index')->with('success','Pharmacy created successfully!');
+        $pharmacy = Pharmacy::create($request->all());
+        if ($request->hasFile('avatar')) {
+            $avatarName = time().'.'.$request->avatar->extension();
+            $request->avatar->move('images/pharmacies/', $avatarName);
+            $pharmacy->avatar = 'images/pharmacies/' . $avatarName;
+        } else {
+            $avatarName = null;
+        }
+        $pharmacy->save();
+        return redirect()->route('pharmacies.index')->with('success', 'Pharmacy created successfully!');
     }
 
     /**
@@ -61,9 +69,19 @@ class PharmacyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pharmacy $pharmacy)
+    public function update(PharmacyRequest $request, Pharmacy $pharmacy)
     {
-        $pharmacy->update($request->all());
+        $pharmacy->update($request->except('avatar'));
+        if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+            $old_avatar = $pharmacy->avatar;
+            $avatar = $request->avatar;
+            $avatar_new_name = time().'.'.$request->avatar->extension();
+            if ($avatar->move('images/pharmacies/', $avatar_new_name)) {
+                unlink($old_avatar);
+            }
+            $pharmacy->avatar = 'images/pharmacies/' . $avatar_new_name;
+        }
+        $pharmacy->save();
         return redirect()->route('pharmacies.index');
     }
 
@@ -75,6 +93,9 @@ class PharmacyController extends Controller
         $pharmacy = Pharmacy::withTrashed()->find($id);
         if ($pharmacy->trashed()) {
             $pharmacy->forceDelete();
+            if ($pharmacy->avatar) {
+                unlink($pharmacy->avatar);
+            }
         } else {
             $pharmacy->delete();
         }

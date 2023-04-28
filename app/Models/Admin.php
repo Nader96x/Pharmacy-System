@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
-    use HasFactory, HasRoles, HasPermissions;
+    use HasFactory, HasRoles;
 
     public static $rules = [
         'email' => 'required|email|unique:admins',
@@ -35,12 +35,7 @@ class Admin extends Authenticatable
     {
         parent::boot();
         static::created(function ($admin) {
-            $admin->assignAsAdmin();
+            $admin->assignRole('admin');
         });
-    }
-
-    public function assignAsAdmin(): void
-    {
-        $this->assignRole('admin');
     }
 }

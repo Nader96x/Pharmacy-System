@@ -33,8 +33,8 @@
                 </h3>
 
             </div>
-            <div class="card-body p-0">
-                <table class="table table-striped projects">
+            <div class="card-body p-3">
+                <table id="table" class="table table-striped table-borderless  text-center">
                     <thead>
                     <tr>
                         <th style="width: 1%">
@@ -47,57 +47,15 @@
                             Price ($)
                         </th>
                         <th>
-                            Cost ($)
+                            Type
                         </th>
 
                         <th style="width: 30%">
+                            Actions
                         </th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @foreach($medicines as $medicine)
-                        <tr>
-                            <td>
-                                {{$medicine['id']}}
-                            </td>
-                            <td>
-                                {{$medicine['name']}}
-                            </td>
-                            <td>
-                                {{$medicine['price']}}
-                            </td>
-                            <td>
-                                {{$medicine['cost']}}
-                            </td>
-                            <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" href="{{route('medicines.show',$medicine['id'])}}">
-                                    <i class="fas fa-eye">
-                                    </i>
-                                    View
-                                </a>
-                                <a class="btn btn-info btn-sm" href="{{route('medicines.edit',$medicine['id'])}}">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Edit
-                                </a>
-
-                                <form action="{{ route('medicines.destroy', $medicine->id) }}" method="POST"
-                                      class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm swal-delete"
-                                            data-id="{{ $medicine->id }}">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
                 </table>
-                <div class="pagination justify-content-center">
-                    {{ $medicines->links() }}
-                </div>
             </div>
             <!-- /.card-body -->
         </div>
@@ -111,12 +69,42 @@
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
     <script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
     <script>
+        $('table').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('medicines.index') }}",
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '$'), searchable: true},
+                {data: 'type.name'},
+                {
+                    data: 'id', orderable: false, searchable: false,
+                    render: function (data, type, full, meta) {
+                        return `
+                        <a class="btn btn-info btn-sm" href="{{route('medicines.edit',':id')}}">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                            Edit
+                        </a>
+                        <button class="btn btn-danger btn-sm" onclick="sweetDelete(event)"
+                                data-id="{{ ':id' }}">
+                            <i class="fas fa-trash-alt"></i> Delete
+                            </button>`.replaceAll(':id', data);
+
+
+                    },
+                }
+            ]
+        })
+        ;
+    </script>
+    <script>
         // Handle the SweetAlert confirmation dialog for delete actions
-        $('.swal-delete').click(function (e) {
+        function sweetDelete(e) {
             e.preventDefault();
 
-            const id = $(this).data('id');
-
+            const id = $(e.target).data('id');
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'This action cannot be undone!',
@@ -138,13 +126,14 @@
                             "_method": 'DELETE'
                         },
                         success: function (data) {
+                            // console.log(data);
+                            $('table').DataTable().ajax.reload();
                             Swal.fire(
                                 'Deleted!',
                                 'The record has been deleted.',
                                 'success'
                             );
-                            // Reload the page or redirect to the index page
-                            location.reload();
+
                         },
                         error: function (data) {
                             Swal.fire(
@@ -157,6 +146,8 @@
 
                 }
             });
-        });
+        }
+
+        // $('.swal-delete').click(sweetDelete);
     </script>
 @endsection
