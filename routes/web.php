@@ -94,17 +94,15 @@ Route::prefix('owners/')->group(function () {
 
 Route::prefix('/orders')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('orders.index');
-//    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('owners.destroy');
+    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
-//    Route::post('/', [OrderController::class, 'store'])->name('owners.store');
-//    Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('owners.edit');
-//    Route::put('/{id}', [OrderController::class, 'update'])->name('owners.update');
+    Route::post('/', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::put('/{id}', [OrderController::class, 'update'])->name('orders.update');
 
 });
 
 Auth::routes(['register' => false]);
-
-Auth::routes();
 
 Route::group([], function () {
     Route::prefix('/stripe')->group(function () {

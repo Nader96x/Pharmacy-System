@@ -6,28 +6,28 @@
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">New Medicine</h3>
+                        <h3 class="card-title">New order</h3>
                     </div>
                     <div class="card-body">
                         @include('partials.validation_errors')
-                        <form action="{{ route('medicines.store') }}" method="post">
+                        <form action="{{ route('orders.store') }}" method="post">
                             @csrf
                             <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" id="name" name="name" value="{{ old('name') }}" class="form-control">
+                                <label for="name">Type</label>
+                                <select name="user_id" id="user_id" class="form-control">
+                                    @foreach($users as $user)
+                                        <option
+                                            value="{{ $user->id }}">{{ $user->name }}
+                                        </option>
+                                @endforeach
                             </div>
                             <div class="form-group">
-                                <label for="name">Price</label>
-                                <input type="number" id="price" name="price" min="1" value="{{ old('price') }}"
-                                       class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Cost</label>
-                                <input type="number" id="cost" name="cost" min="1" value="{{ old('cost') }}"
-                                       class="form-control">
-                            </div>
 
-                            <input type="submit" value="Add" class="btn btn-success">
+                                <input type="checkbox" name="is_insured" value="1">
+                                <label for="name">Is insured</label>
+                            </div>
+                            <input type="submit" value="Add" class="my-3 btn btn-success">
+
                         </form>
                     </div>
                 </div>

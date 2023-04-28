@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -42,9 +43,20 @@ class Order extends Model
             ->withPivot('quantity', 'price');
     }
 
+
+    public function order_medicine_quantity()
+    {
+        return $this->hasMany(OrderMedicineQuantity::class);
+    }
+
     public function delivering_address()
     {
         return $this->belongsTo(UserAddress::class);
+    }
+
+    public function prescriptions()
+    {
+        return DB::table('order_prescriptions')->where('order_id', $this->id)->get();
     }
 
     protected function getHumanReadableDateAttribute()

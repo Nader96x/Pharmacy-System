@@ -101,11 +101,12 @@
             @endrole
                 {data: 'is_insured'},
                 {data: 'status',},
+
                 {
                     data: 'id', orderable: false, searchable: false,
                     render: function (data, type, full, meta) {
                         return `
-                        <a class="btn btn-info btn-sm" href="{{route('medicines.edit',':id')}}">
+                        <a class="btn btn-info btn-sm" href="{{route('orders.edit',':id')}}">
                             <i class="fas fa-pencil-alt">
                             </i>
                             Process
@@ -143,7 +144,7 @@
                     // Send the delete request
                     $.ajax({
                         type: 'POST',
-                        url: '/medicines/' + id,
+                        url: '/orders/' + id,
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "_method": 'DELETE'
