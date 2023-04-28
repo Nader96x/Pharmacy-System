@@ -10,9 +10,18 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            return datatables()->collection(Order::with([
+                'user:id,name',
+                'doctor:id,name',
+                'pharmacy:id,name',
+                'delivering_address:id,street_name,building_number',
+
+            ])->get())->toJson();
+        }
+        return view('admin.orders.index');
     }
 
     /**

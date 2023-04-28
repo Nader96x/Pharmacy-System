@@ -18,6 +18,7 @@ class Order extends Model
         'delivering_address_id',
         'is_insured',
         'prescription',
+        'creation_type',
     ];
 
     public function user()
@@ -40,6 +41,15 @@ class Order extends Model
         return $this->belongsToMany(Medicine::class, 'order_medicine_quantity', 'order_id', 'medicine_id')
             ->withPivot('quantity', 'price');
     }
-    
+
+    public function delivering_address()
+    {
+        return $this->belongsTo(UserAddress::class);
+    }
+
+    protected function getHumanReadableDateAttribute()
+    {
+        return $this->created_at->format('j-F-Y, g:i A');
+    }
 
 }

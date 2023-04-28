@@ -117,7 +117,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('orders.index')}}" class="nav-link">
 
                             @if(in_array(request()->route()->getName(),['orders.index', 'orders.create', 'orders.edit', 'orders.show']))
                                 <i class="fas fa-circle nav-icon"></i>

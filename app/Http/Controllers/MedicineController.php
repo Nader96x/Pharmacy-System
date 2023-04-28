@@ -17,9 +17,9 @@ class MedicineController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return datatables()->collection(Medicine::with(['type' => function ($query) {
-                $query->select('id', 'name');
-            }])->get())->toJson();
+            return datatables()->collection(Medicine::with([
+                'type:id,name',
+            ])->get())->toJson();
         }
         return view('admin.medicines.index');
     }

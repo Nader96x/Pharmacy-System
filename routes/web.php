@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserController;
@@ -37,7 +38,7 @@ Route::group(['middleware' => ['role:admin']], function () {
 
 Route::group(['middleware' => ['role:admin']], function () {
     Route::prefix('/users')->group(function () {
-    Route::get('/',[UserController::class,'index'])->name('users.index');
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
@@ -79,8 +80,8 @@ Route::prefix('/doctors')->group(function () {
 
     Route::get('/{id}/edit', [\App\Http\Controllers\DoctorController::class, 'edit'])->name('doctors.edit');
     Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'update'])->name('doctors.update');
-    Route::put('/{id}/ban',[\App\Http\Controllers\DoctorController::class, 'ban'])->name('doctors.ban');
-    Route::put('/{id}/unban',[\App\Http\Controllers\DoctorController::class, 'unban'])->name('doctors.unban');
+    Route::put('/{id}/ban', [\App\Http\Controllers\DoctorController::class, 'ban'])->name('doctors.ban');
+    Route::put('/{id}/unban', [\App\Http\Controllers\DoctorController::class, 'unban'])->name('doctors.unban');
 });
 Route::prefix('owners/')->group(function () {
     Route::get('/', [\App\Http\Controllers\OwnerController::class, 'index'])->name('owners.index');
@@ -89,17 +90,25 @@ Route::prefix('owners/')->group(function () {
     Route::post('/', [\App\Http\Controllers\OwnerController::class, 'store'])->name('owners.store');
     Route::get('/{id}/edit', [\App\Http\Controllers\OwnerController::class, 'edit'])->name('owners.edit');
     Route::put('/{id}', [\App\Http\Controllers\OwnerController::class, 'update'])->name('owners.update');
-    Route::put('/{id}/ban',[\App\Http\Controllers\OwnerController::class, 'ban'])->name('owners.ban');
-    Route::put('/{id}/unban',[\App\Http\Controllers\OwnerController::class, 'unban'])->name('owners.unban');
 });
 
+Route::prefix('/orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+//    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('owners.destroy');
+    Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
+//    Route::post('/', [OrderController::class, 'store'])->name('owners.store');
+//    Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('owners.edit');
+//    Route::put('/{id}', [OrderController::class, 'update'])->name('owners.update');
+
+});
 
 Auth::routes(['register' => false]);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group([], function () {
+    Route::prefix('/stripe')->group(function () {
+        Route::get('/', [\App\Http\Controllers\StripeController::class, 'stripe'])->name('stripe');
+        Route::post('/', [\App\Http\Controllers\StripeController::class, 'stripePost'])->name('stripe.post');
+    });
+});
