@@ -18,4 +18,26 @@ class Order extends Model
         'is_insured',
         'prescription'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
+
+    public function pharmacy()
+    {
+        return $this->belongsTo(Pharmacy::class);
+    }
+
+    public function delivering_address()
+    {
+        return $this->belongsTo(UserAddress::class);
+    }
+
+
 }

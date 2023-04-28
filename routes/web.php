@@ -81,5 +81,11 @@ Route::group(['middleware' => ['role:admin|owner|doctor']], function () {
     });
 });
 
+Route::group([], function () {
+    Route::prefix('/stripe')->group(function () {
+        Route::get('/', [\App\Http\Controllers\StripeController::class, 'stripe'])->name('stripe');
+        Route::post('/', [\App\Http\Controllers\StripeController::class, 'stripePost'])->name('stripe.post');
+    });
+});
 
 Auth::routes(['register' => false]);
