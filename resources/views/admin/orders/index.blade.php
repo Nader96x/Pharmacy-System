@@ -41,13 +41,13 @@
                             #
                         </th>
                         <th style="width: 30%">
-                            Order ID
+                            Medicine Name
                         </th>
                         <th style="width: 20%">
-                            User Name
+                            Price ($)
                         </th>
                         <th>
-                            address
+                            Cost ($)
                         </th>
 
                         <th style="width: 30%">
@@ -55,19 +55,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($orders as $order)
+                    @foreach($medicines as $medicine)
                         <tr>
                             <td>
-                                {{$order['id']}}
+                                {{$medicine['id']}}
                             </td>
                             <td>
-                                {{$order['name']}}
+                                {{$medicine['name']}}
                             </td>
                             <td>
-                                {{$order['price']}}
+                                {{$medicine['price']}}
                             </td>
                             <td>
-                                {{$order['cost']}}
+                                {{$medicine['cost']}}
                             </td>
                             <td class="project-actions text-right">
                                 <a class="btn btn-primary btn-sm" href="{{route('medicines.show',$medicine['id'])}}">
