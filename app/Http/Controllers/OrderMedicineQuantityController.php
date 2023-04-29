@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\OrderMedicineQuantity;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,12 @@ class OrderMedicineQuantityController extends Controller
      */
     public function index()
     {
-        //
+        // orders in my pharmacy that are not delivered
+        // ['New', 'Processing', 'Waiting', 'Canceled', 'Confirmed', 'Delivered']
+        $orders = Order::where('pharmacy_id', 1)
+            ->where('status', 'New')
+            ->get();
+        return view('orders.index', ['orders' => $orders], compact('orders'));
     }
 
     /**

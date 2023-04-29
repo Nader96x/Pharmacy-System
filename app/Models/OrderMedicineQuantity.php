@@ -9,6 +9,7 @@ class OrderMedicineQuantity extends Model
 {
     use HasFactory;
 
+    protected $table = 'order_medicine_quantity';
     protected $fillable = [
         'order_id',
         'medicine_id',
@@ -26,5 +27,5 @@ class OrderMedicineQuantity extends Model
         return $this->belongsTo(Medicine::class);
     }
 
-    
+
 }
