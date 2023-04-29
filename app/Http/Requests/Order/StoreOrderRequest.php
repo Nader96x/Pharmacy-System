@@ -25,10 +25,11 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'is_insured'=>'required|boolean',
+            'prescription' => 'required',
             'prescription.*' => 'required|image|max:2048',
             'delivering_address_id' => [
                 'required',
-                'exists:user_addresses,id,user_id,' .Auth::user()->id,
+                'exists:user_addresses,id,user_id,' .Auth::id(),
             ],
 
 
@@ -44,7 +45,7 @@ class StoreOrderRequest extends FormRequest
             'prescription.*.image' => 'The file must be an image',
             'prescription.*.max' => 'The file may not be greater than :max kilobytes',
             'delivering_address_id.required' => 'delivering_address_id is required',
-            'delivering_address_id.exists' => 'Please select a valid delivering address',
+            'delivering_address_id.exists' => 'this address not belongs to this user',
 
 
 

@@ -56,7 +56,7 @@ class Order extends Model
 
     public function prescriptions()
     {
-        return DB::table('order_prescriptions')->where('order_id', $this->id)->get();
+        return $this->hasMany(OrderPrescriptions::class);
     }
 
     protected function getHumanReadableDateAttribute()

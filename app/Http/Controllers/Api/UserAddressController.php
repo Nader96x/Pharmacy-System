@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class UserAddressController extends BaseController
 {
     /**
-     * list all addresses for authenticated users
+     * list all addresses for authenticated user
      */
     public function index()
     {
