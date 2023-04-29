@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\User\updateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -16,11 +17,11 @@ class UserController extends BaseController
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(Request $request)
     {
         try {
             $user = Auth::user();
-            return $this->sendResponse($user);
+            return $this->sendResponse(new UserResource($request->user()));
         } catch (ModelNotFoundException $exception) {
             return $this->sendError('User not found.', 404);
         }
@@ -29,9 +30,9 @@ class UserController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(updateUserRequest $request, string $id)
+    public function update(updateUserRequest $request)
     {
-        $user = User::where('id', $id)->first();
+        $user =Auth::user();
         if ($user) {
             if ($request->hasFile('image')) {
                 $old_image = $user->image;
@@ -40,14 +41,11 @@ class UserController extends BaseController
             }
             $user->fill($request->validated());
             $user->save();
-            return $this->sendResponse('Update');
+            if($user->wasChanged())
+                return $this->sendResponse(['user'=>new UserResource($user),'message'=>'Updated']);
+            else  return $this->sendResponse(['user'=>new UserResource($user),'message'=>'nothing updated']);
         } else {
             return $this->sendError('User not found.', 404);
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-
 }

@@ -35,26 +35,7 @@ Route::prefix('/users')->middleware(['auth:sanctum','verified'])->group(function
    Route::put('/',[UserController::class,'update'])->name('users.update');
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('/pharmacies')->group(function () {
-        Route::get('/{post}', [\App\Http\Controllers\PharmacyController::class, 'index']);
-        Route::get('/{post}', [\App\Http\Controllers\PharmacyController::class, 'show']);
-        Route::post('', [\App\Http\Controllers\PharmacyController::class, 'store']);
-        Route::put('/{post}', [\App\Http\Controllers\PharmacyController::class, 'update']);
-        Route::delete('/{post}', [\App\Http\Controllers\PharmacyController::class, 'destroy']);
-    });
-});
-
-Route::post('/sanctum/token', function (Request $request) {
-    $request->validate([
-        'name' => 'required',
-        'avatar' => 'required',
-        'priority' => 'required',
-        'area_id' => 'required',
-    ]);
-});
-
-Route::prefix('/addresses')->group(function () {
+Route::prefix('/addresses')->middleware(['auth:sanctum','verified'])->group(function () {
     Route::get('/', [UserAddressController::class, 'index'])->name('addresses.index');
     Route::post('/', [UserAddressController::class, 'store'])->name('addresses.store');
     Route::get('{address}', [UserAddressController::class,'show'])->name('addresses.show');

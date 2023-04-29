@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Notifications\UserVerifiedNotification;
+use App\Jobs\SendMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -23,6 +23,6 @@ class SendVerificationNotification implements ShouldQueue
      */
     public function handle(object $event): void
     {
-        $event->user->notify(new UserVerifiedNotification);
+        dispatch(new SendMail($event->usser, 'user_greeting_notification'));
     }
 }

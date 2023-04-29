@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('notify:users-not-logged-in-for-month')->daily();
+        $schedule->command('sanctum:prune-expired --hours=24')->daily();
     }
 
     /**

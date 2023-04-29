@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendMail;
 use App\Models\User;
-use App\Notifications\InactiveUserForMonthNotification;
+use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 
 class NotifyInactiveUsersForMonth extends Command
 {
@@ -30,10 +30,9 @@ class NotifyInactiveUsersForMonth extends Command
     public function handle()
     {
         $users = User::where('last_login','<',Carbon::now()->subMonth())->get();
-        foreach ($users as $user) {
-            Notification::route('mail', $user->email)
-                ->notify(new InactiveUserForMonthNotification());
 
+        foreach ($users as $user) {
+            SendMail::dispatch($user,'inactive_user_for_month_notification');
         }
     }
 }

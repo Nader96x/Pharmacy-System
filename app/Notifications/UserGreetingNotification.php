@@ -7,16 +7,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserVerifiedNotification extends Notification implements ShouldQueue
+class UserGreetingNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
+    protected $user;
     public function __construct()
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -35,7 +36,7 @@ class UserVerifiedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->greeting('Hello!')
+            ->greeting(`Hello! ${$this->user->name}`)
             ->line('Congratulations! Your account has been verified.')
             ->line('Thank you for using our application!');
     }

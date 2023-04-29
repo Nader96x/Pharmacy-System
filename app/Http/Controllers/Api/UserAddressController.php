@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAddress\AddUserAddressRequest;
 use App\Http\Requests\UserAddress\Api\EditUserAddressRequest;
+use App\Http\Resources\UserAddressResource;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserAddressController extends Controller
 {
@@ -15,20 +17,11 @@ class UserAddressController extends Controller
      */
     public function index()
     {
-        $userAddresses = UserAddress::first()->paginate(10);
-
-        return responseJson(200,'Success', $userAddresses);
+        $user = Auth::user();
+        $userAddresses = UserAddress::where(['user_id'=>$user->id])->paginate(10);
+        return responseJson(200,'Success', UserAddressResource::collection($userAddresses));
 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -36,32 +29,24 @@ class UserAddressController extends Controller
     {
         $userAddress = new UserAddress();
         $userAddress->fill($request->validated());
+        $userAddress->user_id = Auth::user()->id;
         $userAddress->save();
-
-        return responseJson(200,'Success', $userAddress);
+        return responseJson(200,'Success', new UserAddressResource($userAddress));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $address)
+    public function show(string $address_id)
     {
-        $userAddress = UserAddress::find($address);
+        $user = Auth::user();
+        $userAddress = UserAddress::where(['id' => $address_id , 'user_id' => $user->id]);
         if($userAddress)
-            return responseJson(200,'Success', $userAddress);
+            return responseJson(200,'Success', new UserAddressResource($userAddress));
         else
-            return responseJson(200,'Address Not Found');
+            return responseJson(404,'Address Not Found');
 
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */

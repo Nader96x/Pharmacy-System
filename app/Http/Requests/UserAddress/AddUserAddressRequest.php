@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\UserAddress;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddUserAddressRequest extends FormRequest
@@ -17,7 +18,7 @@ class AddUserAddressRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string, Rule|array|string>
      */
     public function rules(): array
     {
@@ -27,7 +28,6 @@ class AddUserAddressRequest extends FormRequest
             'floor_number' => 'required|numeric|min:0',
             'flat_number' => 'required|numeric|min:1',
             'is_main' => 'nullable|boolean',
-            'user_id' => 'required|exists:users,id',
             'area_id' => 'required|exists:areas,id',
         ];
     }
@@ -42,8 +42,6 @@ class AddUserAddressRequest extends FormRequest
             'floor_number.min' => 'Floor number must be at least 0.',
             'flat_number.required' => 'Flat number field is required.',
             'flat_number.min' => 'Falt number must be at least 1.',
-            'user_id.required' => 'user ID field is required.',
-            'user_id.exists' => 'user ID is invalid.',
             'area_id.required' => 'area ID field is required.',
             'area_id.exists' => 'area ID is invalid.',
         ];

@@ -25,7 +25,7 @@ class updateUserRequest extends FormRequest
         return [
             'name' => 'string|min:3|max:50',
             'gender' => 'in:male,female,other',
-            'birth_date' => 'date',
+            'birth_date' => 'date|before_or_equal:today',
             'phone' => ['regex:/^01[0-2|5]{1}[0-9]{8}$/','unique:users,phone'],
             'national_id' =>['unique:users,national_id','regex:/^\d{14}$/'],
             'image' =>'image'
@@ -40,6 +40,7 @@ class updateUserRequest extends FormRequest
             'name.max'=> 'Your name must be at max :max characters',
             'gender.in' => 'Please select either "male" or "female" or "other" for your gender.',
             'birth_date.date' => 'invalid format  date of birth',
+            'birth_date.before_or_equal' => 'invalid  date of birth',
             'phone.regex' => 'invalid mobile number format',
             'phone.unique' => 'this mobile number is already exists',
             'national_id.regex' => 'invalid national identity format',

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -14,9 +15,11 @@ class InactiveUserForMonthNotification extends Notification implements ShouldQue
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    protected  $user;
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
+
     }
 
     /**
@@ -36,7 +39,7 @@ class InactiveUserForMonthNotification extends Notification implements ShouldQue
     {
         return (new MailMessage)
                 ->subject('We Miss You!')
-                ->greeting('Hello ' . $notifiable->routes['mail'] . ',')
+                ->greeting('Hello, ' . $this->user->name)
                 ->line('We\'ve noticed that you haven\'t logged in to our site for the past month. We miss you and hope to see you back soon!')
                 ->salutation('Best regards,');
     }
