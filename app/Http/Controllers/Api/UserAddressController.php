@@ -7,31 +7,31 @@ use App\Http\Requests\UserAddress\AddUserAddressRequest;
 use App\Http\Requests\UserAddress\Api\EditUserAddressRequest;
 use App\Http\Resources\UserAddressResource;
 use App\Models\UserAddress;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class UserAddressController extends Controller
+class UserAddressController extends BaseController
 {
     /**
-     * Display a listing of the resource.
+     * list all addresses for authenticated users
      */
     public function index()
     {
         $user = Auth::user();
         $userAddresses = UserAddress::where(['user_id'=>$user->id])->paginate(10);
-        return responseJson(200,'Success', UserAddressResource::collection($userAddresses));
-
+        return $this->sendResponse(UserAddressResource::collection($userAddresses));
     }
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created address in storage.
      */
     public function store(AddUserAddressRequest $request)
     {
         $userAddress = new UserAddress();
         $userAddress->fill($request->validated());
-        $userAddress->user_id = Auth::user()->id;
+        $userAddress->user_id = Auth::id();
         $userAddress->save();
-        return responseJson(200,'Success', new UserAddressResource($userAddress));
+        return $this->sendResponse(new UserAddressResource($userAddress),201);
     }
 
     /**
@@ -39,33 +39,46 @@ class UserAddressController extends Controller
      */
     public function show(string $address_id)
     {
-        $user = Auth::user();
-        $userAddress = UserAddress::where(['id' => $address_id , 'user_id' => $user->id]);
-        if($userAddress)
-            return responseJson(200,'Success', new UserAddressResource($userAddress));
-        else
-            return responseJson(404,'Address Not Found');
+        $user_id = Auth::id();
+        try {
+            $userAddress = UserAddress::where(['id' => $address_id , 'user_id' => $user_id])->firstOrFail();
+        }catch (\Exception $exception){
+            return $this->sendError('address not found');
+        }
+            return $this->sendResponse(new UserAddressResource($userAddress));
 
     }
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditUserAddressRequest $request, UserAddress $address)
+    public function update(EditUserAddressRequest $request, $address_id)
     {
-        $address->fill($request->validated());
-        $address->save();
+        $user_id = Auth::id();
+        try {
+            $user_address = UserAddress::where(['id' => $address_id,'user_id' => $user_id])->firstOrFail();
 
-        return responseJson(200,'Success', $address);
+        }catch (ModelNotFoundException $exception){
+            return $this->sendError('user address not found',404);
+        }
+        $user_address->fill($request->validated());
+        $user_address->save();
+        if ($user_address->wasChanged())
+            return  $this->sendResponse(new UserAddressResource($user_address));
+        else return $this->sendResponse('not thing was changed');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserAddress $address)
+    public function destroy($address_id)
     {
+        try{
+        $address = UserAddress::findOrFail($address_id);
+        }catch(ModelNotFoundException $exception){
+            return $this->sendError('user address not found',404);
+        }
+        $address = UserAddress::findOrFail($address_id);
         $address->delete();
-
-        return responseJson(200,'Success');
-
+        return $this->sendResponse('deleted',204);
     }
 }

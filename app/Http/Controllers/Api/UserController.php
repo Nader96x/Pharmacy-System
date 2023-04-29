@@ -32,7 +32,7 @@ class UserController extends BaseController
      */
     public function update(updateUserRequest $request)
     {
-        $user =Auth::user();
+        $user = Auth::user();
         if ($user) {
             if ($request->hasFile('image')) {
                 $old_image = $user->image;
