@@ -46,7 +46,7 @@ Route::prefix('orders')->middleware(['auth:sanctum','verified'])->group(function
     Route::get('/',[OrderController::class,'index'])->name('orders.index');
     Route::get('/{order}',[OrderController::class,'show'])->name('orders.show');
     Route::post('/',[OrderController::class,'store'])->name('orders.store');
-    Route::post('/{order}',[OrderController::class,'update'])->name('orders.update');
+    Route::post('/{order}',[OrderController::class,'update'])->middleware('check_order_status')->name('orders.update'); // PUT -- Update order when status new only
 
 
 });
