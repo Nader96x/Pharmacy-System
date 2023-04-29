@@ -43,8 +43,11 @@ Route::prefix('/addresses')->middleware(['auth:sanctum','verified'])->group(func
     Route::delete('/{address}', [UserAddressController::class, 'destroy'])->name('addresses.destroy');
 });
 Route::prefix('orders')->middleware(['auth:sanctum','verified'])->group(function(){
-   Route::get('/',[OrderController::class,'index'])->name('orders.index');
-   Route::post('/',[OrderController::class,'store'])->name('orders.store');
+    Route::get('/',[OrderController::class,'index'])->name('orders.index');
+    Route::get('/{order}',[OrderController::class,'show'])->name('orders.show');
+    Route::post('/',[OrderController::class,'store'])->name('orders.store');
+    Route::post('/{order}',[OrderController::class,'update'])->name('orders.update');
+
 
 });
 

@@ -32,8 +32,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
-//        dd(Auth::user()->getRoleNames()->first());
         $order = new Order();
         $order->user_id = $request->user_id;
         $order->pharmacy_id = Auth::user()->pharmacy_id;
