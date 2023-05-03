@@ -16,7 +16,7 @@ class CheckOrderStatus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $orderId = $request->route('order_id');
+        $orderId = $request->route('order');
         $order = Order::find($orderId);
 
         if ($order->status !== 'New') {

@@ -25,8 +25,8 @@
         <div class="container-fluid">
             @include('partials.flash-message')
             <div class="card">
-                <div class="card-body p-0">
-                    <table class="table table-striped projects">
+                <div class="card-body p-2 w-100">
+                    <table class="table table-striped ">
                         <thead>
                         <tr>
                             <th>
@@ -55,35 +55,9 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody>
-                        @foreach($users as $user)
-                            <tr>
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->gender }}</td>
-                                <td>{{ $user->phone }}</td>
-                                <td>{{ $user->birth_date }}</td>
-                                <td>{{ $user->national_id }}</td>
-                                <td>
-                                    <form method="POST" action="{{ route('users.destroy', $user->id) }}" class="d-inline">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-sm btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
-                                            <i class="fas fa-trash">
-                                            </i>
-                                            Delete
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
+
                     </table>
 
-                    <div class="d-flex justify-content-center mt-2 w-100">
-                        {{ $users->links() }}
-                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -94,26 +68,34 @@
 
 
 @section('scripts')
-    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-    <script type="text/javascript">
-
-        $('.show_confirm').click(function(event) {
-            let form =  $(this).closest("form");
-            let name = $(this).data("name");
-            event.preventDefault();
-            swal({
-                title: `Are you sure you want to delete this record?`,
-                text: "If you delete this, it will be gone forever.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                    }
-                });
+    <script>
+        $('table').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('users.index') }}",
+            width:'100%',
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {
+                    data: 'email',
+                    orderable: false,
+                },
+                {
+                    data: 'gender',
+                    orderable: false,
+                    searchable: false,},
+                {
+                    data: 'phone',
+                    orderable: false,
+                    searchable: false,
+                },
+                {data: 'birth_date'},
+                {
+                    data: 'national_id',
+                    orderable: false,
+                },
+            ]
         });
     </script>
-
 @endsection

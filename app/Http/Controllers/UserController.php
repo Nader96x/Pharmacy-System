@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
+use Illuminate\Http\Request;
+
 
 class UserController extends Controller
 {
-    public function index(){
-        $users = User::withTrashed()->paginate(10);
-        return view('admin.users.index',['users'=>$users]);
+    public function index( Request $request){
+        if($request->ajax()){
+            return datatables()->collection( User::withTrashed()->get())->toJson() ;
+        }
+        return view('admin.users.index');
     }
     public function destroy($id){
         $user = User::where('id',$id)->first();

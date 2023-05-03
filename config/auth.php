@@ -42,7 +42,11 @@ return [
         ],
         'doctor' => [
             'driver' => 'session',
-            'provider' => 'doctor',
+            'provider' => 'doctors',
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
         'api' => [
             'driver' => 'sanctum',
@@ -77,16 +81,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'doctor' => [
+        'doctors' => [
             'driver' => 'eloquent',
             'model' => App\Models\Doctor::class,
         ],
-
-
-//         'admins' => [
-//             'driver' => 'eloquent',
-//             'model' => App\Models\Admin::class,
-//         ],
     ],
 
     /*
