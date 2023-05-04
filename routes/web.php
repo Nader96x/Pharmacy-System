@@ -90,6 +90,8 @@ Route::prefix('owners/')->group(function () {
     Route::post('/', [\App\Http\Controllers\OwnerController::class, 'store'])->name('owners.store');
     Route::get('/{id}/edit', [\App\Http\Controllers\OwnerController::class, 'edit'])->name('owners.edit');
     Route::put('/{id}', [\App\Http\Controllers\OwnerController::class, 'update'])->name('owners.update');
+    Route::put('/{id}/ban', [\App\Http\Controllers\OwnerController::class, 'ban'])->name('owners.ban');
+    Route::put('/{id}/unban', [\App\Http\Controllers\OwnerController::class, 'unban'])->name('owners.unban');
 });
 
 Route::prefix('/orders')->group(function () {

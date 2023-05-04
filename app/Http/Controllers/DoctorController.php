@@ -14,11 +14,15 @@ class DoctorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // doctors with rule doctor
-        $doctors = Doctor::role('doctor')->paginate(10);
-        return view('doctors.index', compact('doctors'));
+        if ($request->ajax()) {
+            return datatables()->collection(Doctor::with([
+                'doctor:id,name',
+            ])->role('doctor')->get())->toJson();
+        }
+        return view('doctors.index');
     }
 
     /**
@@ -121,17 +125,16 @@ class DoctorController extends Controller
 
     public function destroy($id)
     {
+
         $doctor = Doctor::find($id);
-        // Delete the image file associated with the doctor (if it exists)
         if ($doctor->image && file_exists(public_path($doctor->image))) {
             unlink(public_path($doctor->image));
         }
-
-        // Delete the doctor record from the database
+//        dd($medicine);
         $doctor->delete();
-
-        return redirect()->route('doctors.index')->with('success', 'Doctor deleted successfully.');
+        return redirect()->route('doctors.index')->with('success', 'Doctor Deleted successfully!');
     }
+
 
     public function ban($id)
     {

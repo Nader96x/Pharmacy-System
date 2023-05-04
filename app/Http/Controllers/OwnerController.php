@@ -13,10 +13,15 @@ class OwnerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $owners = Doctor::role('owner')->paginate(4);
-        return view('owners.index', compact('owners'));
+        if ($request->ajax()) {
+            return datatables()->collection(Doctor::with([
+                'doctor:id,name',
+            ])->role('owner')->get())->toJson();
+        }
+
+        return view('owners.index');
     }
 
     /**
