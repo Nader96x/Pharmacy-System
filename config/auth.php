@@ -36,17 +36,17 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'web' =>[
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
         ],
         'doctor' => [
             'driver' => 'session',
             'provider' => 'doctors',
-        ],
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admins',
         ],
         'api' => [
             'driver' => 'sanctum',
@@ -77,13 +77,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
         ],
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Doctor::class
+        ],
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
-        ],
-        'doctors' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Doctor::class,
         ],
     ],
 
@@ -113,14 +113,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'admins' => [
-            'provider' => 'admins',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'doctor' => [
-            'provider' => 'doctor',
+        'doctors' => [
+            'provider' => 'doctors',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

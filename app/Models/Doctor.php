@@ -13,7 +13,6 @@ class Doctor extends Authenticatable
 
     public $timestamps;
     protected $table = 'doctors';
-    protected $guard_name = 'web';
     protected $fillable = [
         'national_id',
         'image',
@@ -32,8 +31,9 @@ class Doctor extends Authenticatable
     protected $dates = [
         'created_at',
         'banned_at',
-
     ];
+    protected $guard_name = 'web';
+
 
     public function pharmacy()
     {

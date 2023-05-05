@@ -22,8 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('admin.dashboard');
-//})->middleware(['auth', 'verified']);
-})->middleware(['auth', 'verified', 'role:admin|owner|doctor']);
+
+})->middleware(['auth:admin,doctor', 'verified', 'role:admin|owner|doctor']);
+Route::middleware('auth:admin,doctor')->group(function (){
+
 
 Route::group(['middleware' => ['role:admin']], function () {
     Route::prefix('/areas')->group(function () {
@@ -103,12 +105,13 @@ Route::prefix('/orders')->group(function () {
     Route::put('/{id}', [OrderController::class, 'update'])->name('orders.update');
 
 });
-
-Auth::routes(['register' => false]);
-
-Route::group([], function () {
-    Route::prefix('/stripe')->group(function () {
-        Route::get('/', [\App\Http\Controllers\StripeController::class, 'stripe'])->name('stripe');
-        Route::post('/', [\App\Http\Controllers\StripeController::class, 'stripePost'])->name('stripe.post');
+    Route::group([], function () {
+        Route::prefix('/stripe')->group(function () {
+            Route::get('/', [\App\Http\Controllers\StripeController::class, 'stripe'])->name('stripe');
+            Route::post('/', [\App\Http\Controllers\StripeController::class, 'stripePost'])->name('stripe.post');
+        });
     });
 });
+Auth::routes(['register' => false]);
+
+

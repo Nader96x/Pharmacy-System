@@ -44,9 +44,6 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
@@ -55,22 +52,15 @@ class LoginController extends Controller
         }
 
         $credentials = $request->only($this->username(), 'password');
-        //change gurard to admins
-
-//        dd($this->guard());
-
-        if (Auth::guard('web')->attempt($credentials)) {
+//        //change gurard to admins
+        $gurad = $request->get('guard');
+        if (Auth::guard($gurad)->attempt($credentials,$request->boolean('remember'))) {
+            $request->session()->regenerate();
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
 
-            return $this->sendLoginResponse($request);
-        } elseif (Auth::guard('doctor')->attempt($credentials)) {
-            Auth::setDefaultDriver('doctor');
-            if ($request->hasSession()) {
-                $request->session()->put('auth.password_confirmed_at', time());
-            }
-            return $this->sendLoginResponse($request);
+            return redirect('/');
         }
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
