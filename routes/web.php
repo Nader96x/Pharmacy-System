@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderMedicineQuantityController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PharmacyController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -75,25 +79,25 @@ Route::middleware('auth:admin,doctor')->group(function () {
     });
 
     Route::prefix('/doctors')->group(function () {
-        Route::get('/', [\App\Http\Controllers\DoctorController::class, 'index'])->name('doctors.index');
-        Route::delete('/{id}', [\App\Http\Controllers\DoctorController::class, 'destroy'])->name('doctors.destroy');
-        Route::get('/create', [\App\Http\Controllers\DoctorController::class, 'create'])->name('doctors.create');
-        Route::post('/', [\App\Http\Controllers\DoctorController::class, 'store'])->name('doctors.store');
+        Route::get('/', [DoctorController::class, 'index'])->name('doctors.index');
+        Route::delete('/{id}', [DoctorController::class, 'destroy'])->name('doctors.destroy');
+        Route::get('/create', [DoctorController::class, 'create'])->name('doctors.create');
+        Route::post('/', [DoctorController::class, 'store'])->name('doctors.store');
 
-        Route::get('/{id}/edit', [\App\Http\Controllers\DoctorController::class, 'edit'])->name('doctors.edit');
-        Route::put('/{id}', [\App\Http\Controllers\DoctorController::class, 'update'])->name('doctors.update');
-        Route::put('/{id}/ban', [\App\Http\Controllers\DoctorController::class, 'ban'])->name('doctors.ban');
-        Route::put('/{id}/unban', [\App\Http\Controllers\DoctorController::class, 'unban'])->name('doctors.unban');
+        Route::get('/{id}/edit', [DoctorController::class, 'edit'])->name('doctors.edit');
+        Route::put('/{id}', [DoctorController::class, 'update'])->name('doctors.update');
+        Route::put('/{id}/ban', [DoctorController::class, 'ban'])->name('doctors.ban');
+        Route::put('/{id}/unban', [DoctorController::class, 'unban'])->name('doctors.unban');
     });
     Route::prefix('owners/')->group(function () {
-        Route::get('/', [\App\Http\Controllers\OwnerController::class, 'index'])->name('owners.index');
-        Route::delete('/{id}', [\App\Http\Controllers\OwnerController::class, 'destroy'])->name('owners.destroy');
-        Route::get('/create', [\App\Http\Controllers\OwnerController::class, 'create'])->name('owners.create');
-        Route::post('/', [\App\Http\Controllers\OwnerController::class, 'store'])->name('owners.store');
-        Route::get('/{id}/edit', [\App\Http\Controllers\OwnerController::class, 'edit'])->name('owners.edit');
-        Route::put('/{id}', [\App\Http\Controllers\OwnerController::class, 'update'])->name('owners.update');
-        Route::put('/{id}/ban', [\App\Http\Controllers\OwnerController::class, 'ban'])->name('owners.ban');
-        Route::put('/{id}/unban', [\App\Http\Controllers\OwnerController::class, 'unban'])->name('owners.unban');
+        Route::get('/', [OwnerController::class, 'index'])->name('owners.index');
+        Route::delete('/{id}', [OwnerController::class, 'destroy'])->name('owners.destroy');
+        Route::get('/create', [OwnerController::class, 'create'])->name('owners.create');
+        Route::post('/', [OwnerController::class, 'store'])->name('owners.store');
+        Route::get('/{id}/edit', [OwnerController::class, 'edit'])->name('owners.edit');
+        Route::put('/{id}', [OwnerController::class, 'update'])->name('owners.update');
+//        Route::put('/{id}/ban', [OwnerController::class, 'ban'])->name('owners.ban');
+//        Route::put('/{id}/unban', [OwnerController::class, 'unban'])->name('owners.unban');
     });
 
     Route::prefix('/orders')->group(function () {
@@ -102,15 +106,15 @@ Route::middleware('auth:admin,doctor')->group(function () {
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('orders.edit');
-        Route::post('/{id}', [OrderController::class, 'save'])->name('medicineQuantity.store');
-        Route::delete('/{id}/remove', [OrderController::class, 'remove'])->name('medicineQuantity.destroy');
-        Route::put('/{id}', [OrderController::class, 'update'])->name('orders.update');
+        Route::post('/{id}', [OrderMedicineQuantityController::class, 'store'])->name('medicineQuantity.store');
+        Route::delete('/{id}/remove', [OrderMedicineQuantityController::class, 'destroy'])->name('medicineQuantity.destroy');
+        Route::put('/{id}', [OrderMedicineQuantityController::class, 'update'])->name('orders.update');
 
     });
     Route::group([], function () {
         Route::prefix('/stripe')->group(function () {
-            Route::get('/', [\App\Http\Controllers\StripeController::class, 'stripe'])->name('stripe');
-            Route::post('/', [\App\Http\Controllers\StripeController::class, 'stripePost'])->name('stripe.post');
+            Route::get('/', [StripeController::class, 'stripe'])->name('stripe');
+            Route::post('/', [StripeController::class, 'stripePost'])->name('stripe.post');
         });
     });
 });

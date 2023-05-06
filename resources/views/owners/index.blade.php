@@ -18,7 +18,7 @@
                         <th>Email</th>
                         {{--                        <th>Password</th>--}}
                         <th>Created At</th>
-                        <th>Is Banned</th>
+                        {{--                        <th>Is Banned</th>--}}
                         <th>Actions</th>
 
                     </tr>
@@ -43,7 +43,7 @@
                     data: 'image',
                     orderable: false,
                     searchable: false,
-                    render: function(data, type, full, meta) {
+                    render: function (data, type, full, meta) {
                         return '<img src="' + data + '" alt="' + full.name + '" width="50">';
                     }
                 },
@@ -54,14 +54,15 @@
                         return new Date(data).toLocaleDateString();
                     }
                 },
-                {data: 'is_banned'}, {
+                // {data: 'is_banned'},
+                {
                     data: 'id', orderable: false, searchable: false,
                     render: function (data, type, full, meta) {
-                        var banText = full.is_banned ? 'Unban' : 'Ban';
-                        var banClass = full.is_banned ? 'btn-success' : 'btn-secondary';
-                        var formAction = full.is_banned ? '{{ route('owners.unban', ':id') }}' : '{{ route('owners.ban', ':id') }}';
-                        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                        var methodInput = '<input type="hidden" name="_method" value="PUT">';
+                        {{--var banText = full.is_banned ? 'Unban' : 'Ban';--}}
+                        {{--var banClass = full.is_banned ? 'btn-success' : 'btn-secondary';--}}
+                        {{--var formAction = full.is_banned ? '{{ route('owners.unban', ':id') }}' : '{{ route('owners.ban', ':id') }}';--}}
+                        {{--var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');--}}
+                        {{--var methodInput = '<input type="hidden" name="_method" value="PUT">';--}}
                         var idInput = '<input type="hidden" name="id" value="' + data + '">';
 
                         var html = `
@@ -73,14 +74,7 @@
                     data-id="${data}">
                 <i class="fas fa-trash-alt"></i> Delete
             </button>
-            <form method="POST" action="${formAction}">
-                <input type="hidden" name="_token" value="${csrfToken}">
-                ${methodInput}
-                ${idInput}
-                <button type="submit" class="btn ${banClass} btn-sm">
-                    <i class="fas ${full.is_banned ? 'fa-lock-open' : 'fa-lock'}"></i> ${banText}
-                </button>
-            </form>
+
         </div>
     `;
 

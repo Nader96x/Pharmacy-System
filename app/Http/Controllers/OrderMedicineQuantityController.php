@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medicine;
 use App\Models\Order;
 use App\Models\OrderMedicineQuantity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderMedicineQuantityController extends Controller
 {
@@ -32,9 +34,19 @@ class OrderMedicineQuantityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(string $order)
     {
-        //
+        $total_price = 0;
+        $medicines = Order::find($order)->medicines;
+        foreach ($medicines as $medicine) {
+            $total_price += $medicine->pivot->price * $medicine->pivot->quantity;
+        }
+        $order = Order::find($order);
+        $order->status = 'Waiting';
+        $order->doctor_id = Auth::id();
+        $order->total_price = $total_price;
+        $order->save();
+        return redirect()->route('orders.index');
     }
 
     /**
@@ -56,16 +68,32 @@ class OrderMedicineQuantityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OrderMedicineQuantity $orderMedicine)
+    public function update(Request $request, string $order)
     {
-        //
+        $order = Order::find($order);
+        $medicine = Medicine::find($request->medicine_id);
+        if ($order->medicines()->where('medicine_id', $medicine->id)->exists())
+            // increase quantity with the new quantity
+            $order->medicines()->updateExistingPivot($medicine->id, ['quantity' => $order->medicines()->where('medicine_id', $medicine->id)->first()->pivot->quantity + $request->quantity]);
+        else
+            $order->medicines()->attach($medicine->id, ['quantity' => $request->quantity, 'price' => $medicine->price]);
+        $order->doctor_id = Auth::id();
+        $order->status = "Processing";
+        $order->save();
+        return redirect()->route('orders.edit', $order->id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OrderMedicineQuantity $orderMedicine)
+    public function destroy(string $order, Request $request)
     {
-        //
+        $order = Order::find($order);
+        $medicine = Medicine::find($request->medicine_id);
+        $order->medicines()->detach($medicine->id);
+        // send json response
+        return response()->json([
+            'success' => 'Record deleted successfully!'
+        ]);
     }
 }

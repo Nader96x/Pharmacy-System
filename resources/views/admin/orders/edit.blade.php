@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Order Medicines</h1>
+                    <h1>Order #{{$order->id}} Medicines</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -158,11 +158,16 @@
                 total.text(parseFloat(total.text().replace(/[^0-9.]/g, '')) + data.pivot.quantity * data.pivot.price);
             },
             // after finish
-            drawCallback: function () {
-                // console.log('drawCallback');
-                // let total = $("tfoot td:eq(-2)");
-                // convert to currency format
-                // total.text("$" + parseFloat(total.text().replace(/[^0-9.]/g, '')).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+            drawCallback: function (event,) {
+                console.log('drawCallback');
+                let data = this.api().data();
+                let total = 0;
+                data.each(function (value, index) {
+                    total += value.pivot.quantity * value.pivot.price;
+                });
+                console.log(total);
+                let totalRow = $("tfoot td:eq(-2)");
+                totalRow.text("$" + parseFloat(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
             }
         })

@@ -105,13 +105,14 @@
                 {
                     data: 'id', orderable: false, searchable: false,
                     render: function (data, type, full, meta) {
+
                         return `
                         <a class="btn btn-info btn-sm" href="{{route('orders.edit',':id')}}">
                             <i class="fas fa-pencil-alt">
                             </i>
                             Process
                         </a>
-                        <button class="btn btn-danger btn-sm" onclick="sweetDelete(event)"
+                        <button class="btn btn-danger btn-sm ${!["New", 'Processing'].includes(full.status) ? 'd-none' : ''}" onclick="sweetDelete(event)"
                                 data-id="{{ ':id' }}">
                             <i class="fas fa-trash-alt"></i> Cancel
                             </button>`.replaceAll(':id', data);
