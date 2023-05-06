@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderMedicineQuantityController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PharmacyController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserController;
@@ -30,6 +31,12 @@ Route::get('/', function () {
 })->middleware(['auth:admin,doctor', 'verified', 'role:admin|owner|doctor']);
 Route::middleware('auth:admin,doctor')->group(function () {
 
+    Route::group(['middleware' => ['role:admin|owner']], function () {
+        Route::prefix('/revenue')->group(function () {
+            Route::get('/', [RevenueController::class, 'index'])->name('revenue.index');
+            Route::get('/{id}', [RevenueController::class, 'show'])->name('revenue.show');
+        });
+    });
 
     Route::group(['middleware' => ['role:admin']], function () {
         Route::prefix('/areas')->group(function () {

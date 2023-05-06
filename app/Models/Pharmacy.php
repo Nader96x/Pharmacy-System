@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Pharmacy extends Model
 {
-    use HasFactory,SoftDeletes,HasApiTokens;
+    use HasFactory, SoftDeletes, HasApiTokens;
 
 
     protected $fillable = [
@@ -27,5 +27,10 @@ class Pharmacy extends Model
     public function area()
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }
