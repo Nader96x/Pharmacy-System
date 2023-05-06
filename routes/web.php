@@ -118,11 +118,13 @@ Route::middleware('auth:admin,doctor')->group(function () {
         Route::put('/{id}', [OrderMedicineQuantityController::class, 'update'])->name('orders.update');
 
     });
-    Route::group([], function () {
-        Route::prefix('/stripe')->group(function () {
-            Route::get('/', [StripeController::class, 'stripe'])->name('stripe');
-            Route::post('/', [StripeController::class, 'stripePost'])->name('stripe.post');
-        });
+
+});
+# https://www.tutsmake.com/laravel-10-stripe-payment-gateway-integration-tutorial/
+Route::group([], function () {
+    Route::prefix('/stripe')->group(function () {
+        Route::get('/', [StripeController::class, 'stripe'])->name('stripe');
+        Route::post('/', [StripeController::class, 'stripePost'])->name('stripe.post');
     });
 });
 Auth::routes(['register' => false]);
