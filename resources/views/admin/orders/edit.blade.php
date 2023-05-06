@@ -31,12 +31,12 @@
                     <thead>
                     <tr>
                         <th style="width: 1%">#</th>
-                        <th style="width: 30%">Medicine Name</th>
-                        <th style="width: 30%">Medicine Type</th>
-                        <th style="width: 20%">Quantity</th>
-                        <th style="width: 20%">Unit Price ($)</th>
-                        <th style="width: 20%">Total Price ($)</th>
-                        <th style="width: 20%">Actions</th>
+                        <th>Medicine Name</th>
+                        <th>Medicine Type</th>
+                        <th>Quantity</th>
+                        <th>Unit Price ($)</th>
+                        <th>Total Price ($)</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     @php
@@ -130,7 +130,7 @@
                 // first column for the row index
                 {data: null, searchable: false},
                 {data: 'name'},
-                {data: 'type_id'},
+                {data: 'type'},
                 {data: 'pivot.quantity'},
                 {data: 'pivot.price', render: $.fn.dataTable.render.number(',', '.', 2, '$')},
                 {

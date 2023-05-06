@@ -102,7 +102,12 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('warning', "You can not edit {$status} order");
         }
         if ($request->ajax()) {
-            return datatables()->collection($order->medicines()->withPivot('quantity', 'price')->get())->toJson();
+//            return datatables()->collection($order->medicines()->withPivot('quantity', 'price')->get())->toJson();
+            // medicine for order with it's quantity and price and type name
+            return datatables()->collection($order->medicines()->withPivot('quantity', 'price')->get())->addColumn('type', function ($medicine) {
+                return $medicine->type->name;
+            })->toJson();
+
         }
         $medicines = Medicine::all();
         return view('admin.orders.edit', compact('order', 'medicines'));
