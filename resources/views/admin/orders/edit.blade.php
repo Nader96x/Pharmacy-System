@@ -90,12 +90,12 @@
             <div class="card-footer">
                 @include('partials.validation_errors')
                 {{--                @dd($order)--}}
-                <form action="{{ route('orders.update',$order->id) }}" method="post">
+                <form id="add_medicine" action="{{ route('orders.update',$order->id) }}" method="post">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
                         <label for="medicine">Medicine</label>
-                        <select name="medicine_id" id="medicine" class="form-control">
+                        <select name="medicine_id" id="add_medicine_medicine" class="form-control">
                             @foreach ($medicines as $medicine)
                                 <option value="{{ $medicine->id }}">{{ $medicine->name }}
                                     {{ $medicine->price }}</option>
@@ -104,9 +104,11 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control" required>
+                        <input type="number" name="quantity" id="add_medicine_quantity"
+                               class="form-control" required>
                     </div>
-                    <input type="submit" value="Add" class="my-3 btn btn-success">
+                    <input onclick="add_medicine(event)" id="add_medicine_btn" type="submit" value="Add"
+                           class="my-3 btn btn-success">
                 </form>
             </div>
         </div>
@@ -120,7 +122,7 @@
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
     {{--    DataTable Script--}}
     <script>
-        $('#table').dataTable({
+        $('table').dataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('orders.edit',$order->id) }}",
@@ -150,8 +152,17 @@
             // add row index to the first column after the table is drawn
             rowCallback: function (row, data, index) {
                 $('td:eq(0)', row).html(index + 1); // add index
+                console.log(data, row, index);
                 // edit the total row
-                $("tfoot td:eq(-2)").html($.fn.dataTable.render.number(',', '.', 2, '$').display([data].reduce((acc, curr) => acc + curr.pivot.quantity * curr.pivot.price, 0)));
+                let total = $("tfoot td:eq(-2)");
+                total.text(parseFloat(total.text().replace(/[^0-9.]/g, '')) + data.pivot.quantity * data.pivot.price);
+            },
+            // after finish
+            drawCallback: function () {
+                // console.log('drawCallback');
+                // let total = $("tfoot td:eq(-2)");
+                // convert to currency format
+                // total.text("$" + parseFloat(total.text().replace(/[^0-9.]/g, '')).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
             }
         })
@@ -159,7 +170,47 @@
     </script>
     {{--add medicine script--}}
     <script>
-        let btn = document.querySelector('.btn-success');
+        function add_medicine(e) {
+            e.preventDefault();
+            let btn = document.getElementById('add_medicine_btn');
+            let medicine = document.getElementById('add_medicine_medicine');
+            let quantity = document.getElementById('add_medicine_quantity');
+            btn.disabled = true;
+            $.ajax({
+                type: 'POST',
+                url: "{{route('orders.update',':id')}}".replaceAll(":id", {{$order->id}}),
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "_method": 'PUT',
+                    "medicine_id": medicine.value,
+                    "quantity": quantity.value,
+                },
+                success: function (data) {
+                    // console.log(data);
+
+                    Swal.fire(
+                        'Added!',
+                        'The record has been Added.',
+                        'success'
+                    );
+
+                },
+                error: function (data) {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred while Adding the record.',
+                        'error'
+                    );
+                },
+                complete: function () {
+                    $('table').DataTable().ajax.reload();
+                    btn.disabled = false;
+                    quantity.value = '';
+                }
+            });
+        }
+
+
     </script>
     {{--    Delete Script--}}
     <script>
