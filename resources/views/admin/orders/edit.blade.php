@@ -39,68 +39,54 @@
                         <th style="width: 20%">Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {{--                    @dd($order->order_medicine_quantity);--}}
                     @php
                         $total = 0;
                     @endphp
-                    @foreach($order->order_medicine_quantity as $orderMedicine)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$orderMedicine->medicine->name}}</td>
-                            <td>{{$orderMedicine->medicine->type->name}}</td>
-                            <td>{{$orderMedicine->quantity}}</td>
-                            <td>{{$orderMedicine->price}}</td>
-                            <td>{{$orderMedicine->quantity*$orderMedicine->price}}</td>
-                            @php
-                                $total += $orderMedicine->quantity*$orderMedicine->price
-                            @endphp
-                            <td>
-                                <button class="btn btn-danger btn-sm" onclick="sweetDelete(event)"
-                                        data-id="{{$orderMedicine->id}}">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
+                    {{-- <tbody>
+                     --}}{{--                    @dd($order->order_medicine_quantity);--}}{{--
+
+                     @foreach($order->order_medicine_quantity as $orderMedicine)
+                         <tr>
+                             <td>{{$loop->iteration}}</td>
+                             <td>{{$orderMedicine->medicine->name}}</td>
+                             <td>{{$orderMedicine->medicine->type->name}}</td>
+                             <td>{{$orderMedicine->quantity}}</td>
+                             <td>{{$orderMedicine->price}}</td>
+                             <td>{{$orderMedicine->quantity*$orderMedicine->price}}</td>
+                             @php
+                                 $total += $orderMedicine->quantity*$orderMedicine->price
+                             @endphp
+                             <td>
+                                 <button class="btn btn-danger btn-sm"
+                                         onclick="sweetDelete(event)"
+                                         data-id="{{$orderMedicine->medicine_id}}">
+                                     <i class="fas fa-trash-alt"></i> Delete
+                                 </button>
+                             </td>
+                         </tr>
+                     @endforeach
+                     </tbody>--}}
+                    <tfoot>
                     <tr>
                         <td></td>
                         <td colspan="4" class="h1 text-left">Total</td>
                         <td>{{$total}}</td>
                         <td>
-                            <button class="btn btn-success btn-sm" onclick="sweetDelete(event)"
-                                    data-id="{{$orderMedicine->id}}">
-                                <i class="fas fa-plus"></i> Save
-                            </button>
+                            <form
+                                action="{{route('medicineQuantity.store',$order->id)}}"
+                                method="post">
+                                @csrf
+                                <button class="btn btn-success btn-sm" type="submit">
+                                    <i class="fas fa-plus"></i> Save
+                                </button>
+                            </form>
                         </td>
-                    </tbody>
+                    </tr>
+                    </tfoot>
                 </table>
 
             </div>
             <!-- /.card-body -->
-
-            <div class="card-header">
-                @include('partials.validation_errors')
-                {{--                @dd($order)--}}
-                <form action="{{ route('orders.update',$order->id) }}" method="post">
-                    @csrf
-                    @method('PUT')
-                    <div class="form-group">
-                        <label for="medicine">Medicine</label>
-                        <select name="medicine_id" id="medicine" class="form-control">
-                            @foreach ($medicines as $medicine)
-                                <option value="{{ $medicine->id }}">{{ $medicine->name }}
-                                    {{ $medicine->price }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Quantity</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control">
-                    </div>
-                    <input type="submit" value="Add" class="my-3 btn btn-success">
-                </form>
-            </div>
             <div class="card-footer">
                 @include('partials.validation_errors')
                 {{--                @dd($order)--}}
@@ -132,39 +118,50 @@
 
 @section('scripts')
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-    {{-- <script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
-     <script>
-         $('table').dataTable({
-             processing: true,
-             serverSide: true,
-             ajax: "{{ route('medicines.index') }}",
-             columns: [
-                 {data: 'id'},
-                 {data: 'name'},
-                 {data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '$'), searchable: true},
-                 {data: 'type.name'},
-                 {
-                     data: 'id', orderable: false, searchable: false,
-                     render: function (data, type, full, meta) {
-                         return `
-                         <a class="btn btn-info btn-sm" href="{{route('medicines.edit',':id')}}">
-                             <i class="fas fa-pencil-alt">
-                             </i>
-                             Edit
-                         </a>
-                         <button class="btn btn-danger btn-sm" onclick="sweetDelete(event)"
-                                 data-id="{{ ':id' }}">
-                             <i class="fas fa-trash-alt"></i> Delete
-                             </button>`.replaceAll(':id', data);
+    {{--    DataTable Script--}}
+    <script>
+        $('#table').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('orders.edit',$order->id) }}",
+            columns: [
+                // first column for the row index
+                {data: null, searchable: false},
+                {data: 'name'},
+                {data: 'type_id'},
+                {data: 'pivot.quantity'},
+                {data: 'pivot.price', render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+                {
+                    data: (data) => data.pivot.quantity * data.pivot.price,
+                    render: $.fn.dataTable.render.number(',', '.', 2, '$')
+                },
+                {
+                    data: 'id', orderable: false, searchable: false,
+                    render: (data, type, full, meta) => {
+                        return `
+                                     <button class="btn btn-danger btn-sm"
+                                                     onclick="sweetDelete(event)"
+                                                     data-id=":id">
+                                                 <i class="fas fa-trash-alt"></i> Delete
+                                             </button>`.replaceAll(':id', data);
+                    },
+                }
+            ],
+            // add row index to the first column after the table is drawn
+            rowCallback: function (row, data, index) {
+                $('td:eq(0)', row).html(index + 1); // add index
+                // edit the total row
+                $("tfoot td:eq(-2)").html($.fn.dataTable.render.number(',', '.', 2, '$').display([data].reduce((acc, curr) => acc + curr.pivot.quantity * curr.pivot.price, 0)));
 
-
-                     },
-                 }
-             ]
-         })
-         ;
-     </script>
-     --}}
+            }
+        })
+        ;
+    </script>
+    {{--add medicine script--}}
+    <script>
+        let btn = document.querySelector('.btn-success');
+    </script>
+    {{--    Delete Script--}}
     <script>
         // Handle the SweetAlert confirmation dialog for delete actions
         function sweetDelete(e) {
@@ -186,10 +183,11 @@
                     // Send the delete request
                     $.ajax({
                         type: 'POST',
-                        url: '/medicines/' + id,
+                        url: "{{route('medicineQuantity.destroy',':id')}}".replaceAll(":id", {{$order->id}}),
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "_method": 'DELETE'
+                            "_method": 'DELETE',
+                            "medicine_id": id
                         },
                         success: function (data) {
                             // console.log(data);

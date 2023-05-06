@@ -93,10 +93,10 @@
                 {data: 'id'},
                 {data: 'user.name'},
                 {data: 'delivering_address.street_name'},
-                {data: 'created_at'},
-                {data: 'doctor.name'},
+                {data: (data) => new Date(data.created_at).toLocaleString('en-EG')},
+                {data: (data) => data.doctor ? data.doctor.name : 'N/A'},
             @role('admin')
-                {data: 'pharmacy.name'},
+                {data: (data) => data.pharmacy ? data.pharmacy.name : 'N/A'},
                 {data: 'creation_type'},
             @endrole
                 {data: 'is_insured'},

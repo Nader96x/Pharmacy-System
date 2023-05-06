@@ -151,6 +151,7 @@
     $.widget.bridge('uibutton', $.ui.button)
 </script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src={{ asset("https://cdn.jsdelivr.net/npm/sweetalert2@10")}}></script>
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
 <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>

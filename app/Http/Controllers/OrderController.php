@@ -15,15 +15,29 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return datatables()->collection(Order::with([
-                'user:id,name',
-                'doctor:id,name',
-                'pharmacy:id,name',
-                'delivering_address:id,street_name,building_number',
+        // if role is admin
+        if (Auth::user()->hasRole('admin')) {
+            if ($request->ajax()) {
+                return datatables()->collection(Order::with([
+                    'user:id,name',
+                    'doctor:id,name',
+                    'pharmacy:id,name',
+                    'delivering_address:id,street_name,building_number',
 
-            ])->get())->toJson();
+                ])->get())->toJson();
+            }
+        } else {
+            if ($request->ajax()) {
+                return datatables()->collection(Order::with([
+                    'user:id,name',
+                    'doctor:id,name',
+                    'pharmacy:id,name',
+                    'delivering_address:id,street_name,building_number',
+
+                ])->where('pharmacy_id', Auth::user()->pharmacy_id)->get())->toJson();
+            }
         }
+
         return view('admin.orders.index');
     }
 
@@ -46,6 +60,27 @@ class OrderController extends Controller
         return redirect()->route('orders.edit', $order->id);
     }
 
+    public function save(string $order)
+    {
+        $order = Order::find($order);
+        $order->status = 'Waiting';
+        $order->doctor_id = Auth::id();
+        $order->save();
+        return redirect()->route('orders.index');
+    }
+
+    public function remove(string $order, Request $request)
+    {
+        $order = Order::find($order);
+        $medicine = Medicine::find($request->medicine_id);
+        $order->medicines()->detach($medicine->id);
+        // send json response
+        return response()->json([
+            'success' => 'Record deleted successfully!'
+        ]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -56,22 +91,19 @@ class OrderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $order, Request $request)
     {
-        if ($request->ajax()) {
-            return datatables()->eloquent($order->medicines()->with('medicine'))->toJson();
-        }
+        // not new or processing
         $order = Order::find($order);
+        $status = $order->status;
+        if (!in_array($status, ['New', 'Processing'])) {
+            return redirect()->route('orders.index')->with('warning', "You can not edit {$status} order");
+        }
+        if ($request->ajax()) {
+            return datatables()->collection($order->medicines()->withPivot('quantity', 'price')->get())->toJson();
+        }
         $medicines = Medicine::all();
         return view('admin.orders.edit', compact('order', 'medicines'));
     }
@@ -83,15 +115,25 @@ class OrderController extends Controller
     {
         $order = Order::find($order);
         $medicine = Medicine::find($request->medicine_id);
-        $order->medicines()->attach($medicine->id, ['quantity' => $request->quantity, 'price' => $medicine->price]);
+        if ($order->medicines()->where('medicine_id', $medicine->id)->exists())
+            // increase quantity with the new quantity
+            $order->medicines()->updateExistingPivot($medicine->id, ['quantity' => $order->medicines()->where('medicine_id', $medicine->id)->first()->pivot->quantity + $request->quantity]);
+        else
+            $order->medicines()->attach($medicine->id, ['quantity' => $request->quantity, 'price' => $medicine->price]);
+        $order->doctor_id = Auth::id();
+        $order->status = "Processing";
+        $order->save();
         return redirect()->route('orders.edit', $order->id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy($order)
     {
-        //
+        $order = Order::find($order);
+        $order->status = 'Canceled';
+        $order->save();
+        return redirect()->route('orders.index');
     }
 }
