@@ -3,11 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserGreetingNotification extends Notification implements ShouldQueue
+class OrderInvoiceNotification extends Notification
 {
     use Queueable;
 
@@ -15,10 +14,12 @@ class UserGreetingNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      */
     protected $user;
+    protected $order;
 
     public function __construct()
     {
-        $this->user = $user;
+        $user = $this->user;
+        $order = $this->order;
     }
 
     /**
@@ -37,8 +38,9 @@ class UserGreetingNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->greeting(`Hello ${$this->user->name} !`)
-            ->line('Congratulations! Your account has been verified.')
+            ->subject('Order Invoice')
+            ->line('Please Pay ' . $this->order->total_price . '$ to complete your order ')
+            ->action('Pay Now', route('stripe', ["id" => $this->order->id]))
             ->line('Thank you for using our application!');
     }
 

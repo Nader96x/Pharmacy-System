@@ -3,10 +3,9 @@
 namespace App\Jobs;
 
 use App\Notifications\InactiveUserForMonthNotification;
+use App\Notifications\OrderInvoiceNotification;
 use App\Notifications\UserGreetingNotification;
 use Illuminate\Bus\Queueable;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,11 +19,14 @@ class SendMail implements ShouldQueue
      * Create a new job instance.
      */
     protected $user;
+    protected $order;
     protected $notificationType;
-    public function __construct($user, $notificationType)
+
+    public function __construct($user, $notificationType, $order = null)
     {
         $this->user = $user;
         $this->notificationType = $notificationType;
+        $this->order = $order;
     }
 
     /**
@@ -39,6 +41,10 @@ class SendMail implements ShouldQueue
                 break;
             case 'user_greeting_notification':
                 $notification = new UserGreetingNotification($this->user);
+                break;
+            case "invoice":
+                $notification = new OrderInvoiceNotification($this->user, $this->order);
+                break;
         }
         $this->user->notify($notification);
     }

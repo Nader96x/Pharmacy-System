@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendMail;
 use App\Models\Medicine;
 use App\Models\Order;
 use App\Models\OrderMedicineQuantity;
@@ -46,6 +47,7 @@ class OrderMedicineQuantityController extends Controller
         $order->doctor_id = Auth::id();
         $order->total_price = $total_price;
         $order->save();
+        SendMail::dispatch($order->user, 'invoice', $order);
         return redirect()->route('orders.index');
     }
 
