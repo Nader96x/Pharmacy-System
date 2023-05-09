@@ -70,7 +70,7 @@ class Kernel extends HttpKernel
     ];
     protected $routeMiddleware = [
         // ...
-        'check_order_status' => \App\Http\Middleware\CheckOrderStatus::class,
+        'check_order_status' => Middleware\Api\CheckOrderStatus::class,
     ];
 
 }

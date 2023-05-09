@@ -17,6 +17,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('notify:users-not-logged-in-for-month')->daily();
         $schedule->command('sanctum:prune-expired --hours=24')->daily(); // remove expired tokens every 24 hours
+        $schedule->command('queue:work')->everyMinute();
+        $schedule->command('queue:queue:restart')->everyFiveMinutes();
+
+
+
     }
 
     /**
