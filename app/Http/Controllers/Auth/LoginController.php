@@ -56,6 +56,7 @@ class LoginController extends Controller
         $gurad = $request->get('guard');
         if (Auth::guard($gurad)->attempt($credentials,$request->boolean('remember'))) {
             $request->session()->regenerate();
+            Auth::setDefaultDriver($gurad);
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
