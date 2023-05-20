@@ -122,17 +122,16 @@ Route::middleware('auth:admin,doctor')->group(function () {
     });
 
 });
-# https://www.tutsmake.com/laravel-10-stripe-payment-gateway-integration-tutorial/
+
 Route::group([], function () {
     Route::prefix('/payments')->group(function () {
         Route::get('/', [StripeController::class, 'stripe'])->name('stripe');
-//        Route::post('/', [StripeController::class, 'stripePost'])->name('stripe.post');
         Route::get('/{id}/success', [StripeController::class, 'stripeSuccess'])->name('stripe.success');
         Route::get('/{id}/cancel', [StripeController::class, 'stripeCancel'])->name('stripe.cancel');
         Route::get('/{id}/status', [StripeController::class, 'status'])->name('order.status');
     });
 });
-Route::post('/administration-logout',function (Request $request){
+Route::post('/administration-logout', function (Request $request) {
     $guard = Auth::guard()->name;
     Auth::guard($guard)->logout();
     $request->session()->invalidate();
