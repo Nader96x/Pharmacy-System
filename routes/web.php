@@ -11,6 +11,7 @@ use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     return view('admin.dashboard');
 
 })->middleware(['auth:admin,doctor', 'verified', 'role:admin|owner|doctor']);
@@ -130,6 +132,14 @@ Route::group([], function () {
         Route::get('/{id}/status', [StripeController::class, 'status'])->name('order.status');
     });
 });
+Route::post('/administration-logout',function (Request $request){
+    $guard = Auth::guard()->name;
+    Auth::guard($guard)->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return to_route("login");
+})->name('administration-logout');
+
 Auth::routes(['register' => false]);
 
 
