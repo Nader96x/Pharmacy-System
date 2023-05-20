@@ -51,13 +51,23 @@ class StripeController extends Controller
             'cancel_url' => route('stripe.cancel', ['id' => $order->id]),
             'client_reference_id' => $order->id,
         ]);
-
+//        dd($checkout_session);
+        $stripe_session_id = $checkout_session->id;
+        $order->stripe_session_id = $stripe_session_id;
+        $order->save();
         return redirect($checkout_session->url, 303);
     }
 
     public function stripeSuccess(Request $request)
     {
+
         $order = Order::find($request->id);
+        $session_id = $order->stripe_session_id;
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $session = Session::retrieve($session_id);
+        if ($session->payment_status != 'paid') {
+            return redirect()->route('order.status', ['id' => $order->id])->with('error', 'Payment failed!');
+        }
         $order->status = 'Confirmed';
         $order->save();
         return redirect()->route('order.status', ['id' => $order->id])->with('success', 'Payment successful!');
