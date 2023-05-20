@@ -71,16 +71,14 @@
                         </tr>
                         @foreach($order->medicines as $medicine)
                             {{--                        @dd($order->medicines)--}}
-                            <ul class="list-unstyled">
-                                <li>
-                                    <tr>
-                                        <td>{{$medicine->name}}</td>
-                                        <td>{{$medicine->pivot->quantity}}</td>
-                                        <td>{{$medicine->pivot->price}}</td>
-                                        <td>{{$medicine->pivot->quantity*$medicine->pivot->price}}</td>
-                                    </tr>
-                                </li>
-                            </ul>
+
+                            <tr>
+                                <td>{{$medicine->name}}</td>
+                                <td>{{$medicine->pivot->quantity}}</td>
+                                <td>{{$medicine->pivot->price}}</td>
+                                <td>{{$medicine->pivot->quantity*$medicine->pivot->price}}</td>
+                            </tr>
+
                         @endforeach
 
                     </table>
