@@ -9,6 +9,11 @@ use Stripe\Stripe;
 
 class StripeController extends Controller
 {
+    public function __construct()
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+    }
+
     public function stripe(Request $request)
     {
         $url = $request->root();
@@ -16,6 +21,11 @@ class StripeController extends Controller
 
         if ($order->status != 'Waiting') {
             return redirect()->route('order.status', ['id' => $order->id]);
+        }
+
+        if ($order->stripe_session_id) {
+            $checkout_session = Session::retrieve($order->stripe_session_id);
+            $checkout_session->expire();
         }
 
         $products = [];
@@ -39,7 +49,6 @@ class StripeController extends Controller
         $order->save();
 
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
         $checkout_session = Session::create([
             'line_items' => $products,
             'mode' => 'payment',
@@ -61,7 +70,7 @@ class StripeController extends Controller
 
         $order = Order::find($request->id);
         $session_id = $order->stripe_session_id;
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+//        Stripe::setApiKey(env('STRIPE_SECRET'));
         $session = Session::retrieve($session_id);
         if ($session->payment_status != 'paid') {
             return redirect()->route('order.status', ['id' => $order->id])->with('error', 'Payment failed!');
