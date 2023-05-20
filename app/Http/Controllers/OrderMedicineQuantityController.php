@@ -37,12 +37,14 @@ class OrderMedicineQuantityController extends Controller
      */
     public function store(string $order)
     {
+        $order = Order::find($order);
+
         $total_price = 0;
-        $medicines = Order::find($order)->medicines;
+        $medicines = $order->medicines;
         foreach ($medicines as $medicine) {
             $total_price += $medicine->pivot->price * $medicine->pivot->quantity;
         }
-        $order = Order::find($order);
+
         $order->status = 'Waiting';
         $order->doctor_id = Auth::id();
         $order->total_price = $total_price;
