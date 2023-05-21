@@ -6,7 +6,6 @@ use App\Http\Requests\Area\AddAreaRequest;
 use App\Http\Requests\Area\EditAreaRequest;
 use App\Models\Area;
 use App\Models\Country;
-use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
@@ -15,8 +14,22 @@ class AreaController extends Controller
      */
     public function index()
     {
+//        dd(auth()->user()->getAllPermissions(), auth()->user()->getRoleNames(), auth()->user()->hasRole('admin'), auth()->user()->Permissions());
         $areas = Area::first()->paginate(10);
         return view('admin.areas.index', compact('areas'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(AddAreaRequest $request)
+    {
+        $area = Area::create($request->all());
+        if ($area) {
+            return redirect()->route('areas.index')->with('success', 'Area created successfully!');
+        } else {
+            return back()->with('error', 'Something Went Wrong');
+        }
     }
 
     /**
@@ -26,19 +39,6 @@ class AreaController extends Controller
     {
         $countries = Country::all();
         return view('admin.areas.create', compact('countries'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(AddAreaRequest $request)
-    {
-        $area = Area::create($request->all());
-        if($area){
-            return redirect()->route('areas.index')->with('success','Area created successfully!');
-        }else{
-            return back()->with('error', 'Something Went Wrong');
-        }
     }
 
     /**
@@ -64,7 +64,7 @@ class AreaController extends Controller
      */
     public function update(EditAreaRequest $request, Area $area)
     {
-        if($area->update($request->all()))
+        if ($area->update($request->all()))
             return redirect()->route('areas.index')->with('success', 'Area Updated Successfully');
         else
             return redirect()->route('areas.index')->with('error', 'Something Went Wrong!');
@@ -76,10 +76,10 @@ class AreaController extends Controller
     public function destroy($id)
     {
         $area = Area::find($id);
-        if($area){
+        if ($area) {
             $area->delete();
             return redirect()->route('areas.index')->with('success', 'Area Deleted Successfully');
-        }else{
+        } else {
             return back()->with('error', 'Area Not Found');
         }
     }

@@ -5,16 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Medicine\StoreMedicineRequest;
 use App\Http\Requests\Medicine\UpdateMedicineRequest;
 use App\Models\Medicine;
+use App\Models\MedicineType;
+use Illuminate\Http\Request;
+
 
 class MedicineController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $medicines = Medicine::paginate(10);
-        return view('admin.medicines.index', ['medicines' => $medicines], compact('medicines'));
+        if ($request->ajax()) {
+            return datatables()->collection(Medicine::with([
+                'type:id,name',
+            ])->get())->toJson();
+        }
+        return view('admin.medicines.index');
     }
 
     /**
@@ -22,7 +29,8 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        return view('admin.medicines.create');
+        $types = MedicineType::all();
+        return view('admin.medicines.create', compact('types'));
     }
 
     /**
@@ -34,7 +42,7 @@ class MedicineController extends Controller
         $medicine = new Medicine();
         $medicine->name = $request->name;
         $medicine->price = $request->price;
-        $medicine->cost = $request->cost;
+        $medicine->type_id = $request->type_id;
         $medicine->save();
         return redirect()->route('medicines.index')->with('success', 'Item stored successfully!');
     }
@@ -44,8 +52,6 @@ class MedicineController extends Controller
      */
     public function show($id)
     {
-        $medicine = Medicine::find($id);
-        return view('admin.medicines.show', ['medicine' => $medicine], compact('medicine'));
     }
 
     /**
@@ -55,7 +61,8 @@ class MedicineController extends Controller
     {
 //        dd($id);
         $medicine = Medicine::find($id);
-        return view('admin.medicines.edit', ['medicine' => $medicine], compact('medicine'));
+        $types = MedicineType::all();
+        return view('admin.medicines.edit', ['medicine' => $medicine], compact('medicine', 'types'));
     }
 
     /**
@@ -66,7 +73,7 @@ class MedicineController extends Controller
         $medicine = Medicine::find($id);
         $medicine->name = $request->name;
         $medicine->price = $request->price;
-        $medicine->cost = $request->cost;
+        $medicine->type_id = $request->type_id;
         $medicine->save();
         return redirect()->route('medicines.index')->with('success', 'Item updated successfully!');
     }

@@ -99,7 +99,6 @@
 
 @section('scripts')
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script type="text/javascript">
 
         $('.show_confirm').click(function(event) {
@@ -109,7 +108,7 @@
             swal({
                 title: `Are you sure you want to delete this record?`,
                 text: "If you delete this, it will be gone forever.",
-                icon: "danger",
+                icon: "warning",
                 buttons: true,
                 dangerMode: true,
             })
