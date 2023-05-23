@@ -47,21 +47,21 @@ class DoctorController extends Controller
             'email' => 'required|email|unique:doctors,email',
             'password' => 'required',
         ]);
-//        dd($request->all());
+
         $doctor = new Doctor;
         $doctor->national_id = $request->national_id;
         $doctor->name = $request->name;
         $doctor->pharmacy_id = Auth::user()->pharmacy_id || $request->pharmacy_id;
         $doctor->email = $request->email;
         $doctor->password = Hash::make($request->password);
-//        dd($request->image);
+
         if ($request->has('image')) {
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             Image::make($image)->resize(300, 300)->save(public_path('images/doctors' . $filename));
             $doctor->image = 'images/doctors' . $filename;
         }
-//        dd($request->image, $doctor);
+
         $doctor->save();
         $doctor->assignRole('doctor');
 

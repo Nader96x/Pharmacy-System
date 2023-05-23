@@ -18,11 +18,10 @@ class Kernel extends ConsoleKernel
     ];
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('sanctum:prune-expired --hours=24')->daily(); // remove expired tokens every 24 hours
+        $schedule->command('queue:work')->withoutOverlapping()->everyMinute();
         $schedule->command('notify:users-not-logged-in-for-month')->daily();
         $schedule->command("order:assign-new-order-to-pharmacy")->everyMinute();
-        $schedule->command('sanctum:prune-expired --hours=24')->daily(); // remove expired tokens every 24 hours
-        $schedule->command('queue:work')->everyMinute();
-        $schedule->command('queue:queue:restart')->everyFiveMinutes();
     }
 
     /**
@@ -31,7 +30,6 @@ class Kernel extends ConsoleKernel
     protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');
-
         require base_path('routes/console.php');
     }
 }

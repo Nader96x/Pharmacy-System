@@ -6,7 +6,7 @@ use App\Jobs\SendMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendVerificationNotification implements ShouldQueue
+class SendGreetingNotification implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -23,6 +23,6 @@ class SendVerificationNotification implements ShouldQueue
      */
     public function handle(object $event): void
     {
-        dispatch(new SendMail($event->usser, 'user_greeting_notification'));
+        dispatch(new SendMail($event->user, 'user_greeting_notification'));
     }
 }

@@ -40,6 +40,7 @@ class SendMail implements ShouldQueue
                 $notification = new InactiveUserForMonthNotification($this->user);
                 break;
             case 'user_greeting_notification':
+                echo $this->user;
                 $notification = new UserGreetingNotification($this->user);
                 break;
             case "invoice":

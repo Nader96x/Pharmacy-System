@@ -9,7 +9,7 @@
     @if($order)
         @if($order->status == 'Waiting')
             <div class="alert alert-warning">
-                <strong>Warning!</strong> Your order is pending. <a href="{{route('stripe')}}?id={{$order->id}}}">Please
+                <strong>Warning!</strong> Your order is pending. <a href="{{route('stripe')}}?id={{$order->id}}">Please
                     pay to continue.</a>
             </div>
         @elseif($order->status == 'Cancelled')

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Listeners\SendVerificationNotification;
+use App\Listeners\SendGreetingNotification;
 use Illuminate\Auth\Events\Registered;;
 
 use Illuminate\Auth\Events\Verified;
@@ -21,7 +21,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         Verified::class => [
-            SendVerificationNotification::class
+            SendGreetingNotification::class
         ]
     ];
 

@@ -53,7 +53,7 @@ class StripeController extends Controller
             'line_items' => $products,
             'mode' => 'payment',
             "customer_email" => $order->user->email,
-            "payment_method_types" => ["card"],
+            "payment_method_types" => ["card","alipay"],
             'success_url' => route('stripe.success', ['id' => $order->id]),
             'cancel_url' => route('stripe.cancel', ['id' => $order->id]),
             'client_reference_id' => $order->id,

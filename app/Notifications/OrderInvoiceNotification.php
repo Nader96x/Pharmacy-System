@@ -16,10 +16,11 @@ class OrderInvoiceNotification extends Notification
     protected $user;
     protected $order;
 
-    public function __construct()
+    public function __construct($user, $order)
     {
-        $user = $this->user;
-        $order = $this->order;
+         $this->user =$user;
+         $this->order = $order;
+         echo $this->order;
     }
 
     /**
@@ -40,7 +41,7 @@ class OrderInvoiceNotification extends Notification
         return (new MailMessage)
             ->subject('Order Invoice')
             ->line('Please Pay ' . $this->order->total_price . '$ to complete your order ')
-            ->action('Pay Now', route('stripe', ["id" => $this->order->id]))
+            ->line('Pay Now'. route('stripe') ."?id=" . $this->order->id)
             ->line('Thank you for using our application!');
     }
 

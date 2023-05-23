@@ -29,11 +29,11 @@ class AssignNewOrderToPharmacy extends Command
     public function handle()
     {
         $pharmacies= Pharmacy::all();
-        $new_orders = Order::where('status', 'new')->get();
+        $new_orders = Order::where('status', 'New')->get();
         foreach ($new_orders as $order) {
             $pharmacy = null;
             foreach ($pharmacies as $p) {
-                $address = UserAddress::where('id',$order->user_id)->first();
+                $address = UserAddress::where('id',$order->delivering_address_id)->first();
                 if ($p->area_id == $address->area_id) {
                     if ($pharmacy == null || $p->priority > $pharmacy->priority) {
                         $pharmacy = $p;
@@ -41,7 +41,7 @@ class AssignNewOrderToPharmacy extends Command
                 }
             }
             if ($pharmacy != null) {
-                Order::where('id', $order->id)->update(['status' => 'processing', 'pharmacy_id' => $pharmacy->id]);
+                Order::where('id', $order->id)->update(['status' => 'Processing', 'pharmacy_id' => $pharmacy->id]);
             }
         }
     }
