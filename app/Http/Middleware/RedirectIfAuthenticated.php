@@ -17,6 +17,8 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
+        //session_abort();
+        dd($guards);
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {

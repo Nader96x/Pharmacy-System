@@ -36,8 +36,8 @@ class AuthController extends BaseController
        $user->save();
        if(!$user->hasVerifiedEmail())
             event(new Registered($user));
-
-        return $this->sendResponse(new UserResource($user),201);
+        $token = $user->createToken($request->email)->plainTextToken;
+        return $this->sendResponse(['user' =>new UserResource($user),'token' =>$token],201);
     }
     /*
     Login For User

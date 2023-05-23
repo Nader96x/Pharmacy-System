@@ -14,9 +14,9 @@ class UserGreetingNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    protected $user;
+    public $user;
 
-    public function __construct()
+    public function __construct($user)
     {
         $this->user = $user;
     }
@@ -37,7 +37,7 @@ class UserGreetingNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->greeting(`Hello ${$this->user->name} !`)
+            ->line(`Hello $this->user !`)
             ->line('Congratulations! Your account has been verified.')
             ->line('Thank you for using our application!');
     }
