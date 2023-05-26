@@ -5,11 +5,12 @@ namespace App\Models;
 use Cog\Laravel\Ban\Traits\Bannable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class Doctor extends Authenticatable
 {
-    use HasFactory, HasRoles, Bannable;
+    use HasFactory, HasRoles, Bannable,Notifiable;
 
     public $timestamps;
     protected $table = 'doctors';
@@ -32,7 +33,7 @@ class Doctor extends Authenticatable
         'created_at',
         'banned_at',
     ];
-    protected $guard_name = 'web';
+    protected $guard = 'doctor';
 
 
     public function pharmacy()

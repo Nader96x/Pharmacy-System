@@ -44,7 +44,7 @@ class DoctorController extends Controller
             'national_id' => 'required|unique:doctors,national_id',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'name' => 'required',
-            'email' => 'required|email|unique:doctors,email',
+            'email' => 'required|email|unique:doctors|unique:admins,,email',
             'password' => 'required',
         ]);
 
