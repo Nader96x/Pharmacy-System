@@ -6,7 +6,13 @@ Pharmacy-System is a Laravel-based pharmacy system that simplifies the process o
 
 Pharmacy-System is a highly versatile and customizable system that can be tailored to the unique needs of healthcare providers. It is a secure and reliable solution that streamlines medication management, enhances the customer experience, and improves the quality of patient care.
 
-
+## Technologies Used
+- PHP Laravel
+- JavaScript
+- Bootstrap
+- AdminLTE
+- HTML
+- Stripe Payment Gateway
 
 
 
@@ -23,6 +29,7 @@ Pharmacy-System is a highly versatile and customizable system that can be tailor
 - Admin can ban and unban doctors for a period of three days.
 
 
+
 ## To create an admin
 
 
@@ -30,3 +37,5 @@ Pharmacy-System is a highly versatile and customizable system that can be tailor
   php artisan create:admin --email=name@example.com --password=123456
 
 ```
+## Contributors
+@all-contributors please add @peter2s for <contributions>
