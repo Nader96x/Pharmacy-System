@@ -38,4 +38,9 @@ Pharmacy-System is a highly versatile and customizable system that can be tailor
 
 ```
 ## Contributors
-@all-contributors please add @peter2s for <contributions>
+- [@Nader Mohammed](https://github.com/Nader96x)
+- [@Peter Salah](https://github.com/Peter2s)
+- [@Salwa Rafik](https://github.com/Salwa-Rafik)
+- [@Eman Gamal](https://github.com/EmanGamal1)
+- [@Hossam Salah](https://github.com/hossamsalah22)
+- [@Norhan Salem](https://github.com/NorhanSalem)
